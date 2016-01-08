@@ -1,0 +1,327 @@
+[
+    {
+        "code": "WYH",
+        "del": false,
+        "isHide": true,
+        "menuId": 1001,
+        "name": "微银行",
+        "order": "1",
+        "modules":[],
+        "subMenu": [
+            {
+                "code": "ZHYE",
+                "del": true,
+                "isHide": false,
+                "menuId": 2001,
+                "name": "账户余额",
+                "order": "2",
+                "pid": "1001",
+                "type": 0,
+                "url": "test",
+                "modules": [
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "hahahah"
+                    },
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "bbbb"
+                    }
+                ]
+            },
+            {
+                "code": "ZHMX",
+                "del": false,
+                "isHide": true,
+                "menuId": 2002,
+                "name": "账户明细",
+                "order": "3",
+                "pid": "1001",
+                "type": 0,
+                "url": "test",
+                "modules": [
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "hahahah"
+                    },
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "bbbb"
+                    }
+                ]
+            },
+            {
+                "code": "ZHGL",
+                "del": false,
+                "isHide": false,
+                "menuId": 2003,
+                "name": "账户管理",
+                "order": "4",
+                "pid": "1001",
+                "type": 0,
+                "modules": [
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "hahahah"
+                    },
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "bbbb"
+                    }
+                ]
+            },
+            {
+                "code": "ZHGS",
+                "del": false,
+                "isHide": false,
+                "menuId": 2004,
+                "name": "账户挂失",
+                "order": "5",
+                "pid": "1001",
+                "type": 0,
+                "modules": [
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "hahahah"
+                    },
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "bbbb"
+                    }
+                ]
+            },
+            {
+                "code": "GDFW",
+                "del": false,
+                "isHide": false,
+                "menuId": 2005,
+                "name": "更多服务",
+                "order": "6",
+                "pid": "1001",
+                "type": 0,
+                "modules": [
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "hahahah"
+                    },
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "bbbb"
+                    }
+                ]
+            }
+        ],
+        "type": 1,
+        "url": ""
+    },
+    {
+        "code": "WJY",
+        "del": false,
+        "isHide": false,
+        "menuId": 1002,
+        "name": "微交易",
+        "order": "7",
+        "modules":[],
+        "subMenu": [
+            {
+                "code": "DHHZ",
+                "del": false,
+                "isHide": false,
+                "menuId": 2008,
+                "name": "定活互转",
+                "order": "10",
+                "pid": "1002",
+                "type": 0,
+                "modules": [
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "hahahah"
+                    },
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "bbbb"
+                    }
+                ]
+            },
+            {
+                "code": "GDFW",
+                "del": false,
+                "isHide": false,
+                "menuId": 2009,
+                "name": "更多服务",
+                "order": "11",
+                "pid": "1002",
+                "type": 0,
+                "modules": [
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "hahahah"
+                    },
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "bbbb"
+                    }
+                ]
+            },
+            {
+                "code": "ZZFW",
+                "del": false,
+                "isHide": false,
+                "menuId": 2006,
+                "name": "转账服务",
+                "order": "8",
+                "pid": "1002",
+                "type": 0,
+                "modules": [
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "hahahah"
+                    },
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "bbbb"
+                    }
+                ]
+            },
+            {
+                "code": "YYFW",
+                "del": false,
+                "isHide": false,
+                "menuId": 2007,
+                "name": "预约服务",
+                "order": "9",
+                "pid": "1002",
+                "type": 0,
+                "modules": [
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "hahahah"
+                    },
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "bbbb"
+                    }
+                ]
+            }
+        ],
+        "type": 1
+    },
+    {
+        "code": "WFW",
+        "del": false,
+        "isHide": false,
+        "menuId": 1003,
+        "name": "微服务",
+        "order": "12",
+        "modules":[],
+        "subMenu": [
+            {
+                "code": "WDCX",
+                "del": false,
+                "isHide": false,
+                "menuId": 2010,
+                "name": "网点查询",
+                "order": "13",
+                "pid": "1003",
+                "type": 0,
+                "modules": [
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "hahahah"
+                    },
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "bbbb"
+                    }
+                ]
+            },
+            {
+                "code": "LLCX",
+                "del": false,
+                "isHide": false,
+                "menuId": 2011,
+                "name": "利率查询",
+                "order": "14",
+                "pid": "1003",
+                "type": 0,
+                "modules": [
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "hahahah"
+                    },
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "bbbb"
+                    }
+                ]
+            },
+            {
+                "code": "SCHD",
+                "del": false,
+                "isHide": false,
+                "menuId": 2012,
+                "name": "市场活动",
+                "order": "15",
+                "pid": "1003",
+                "type": 0,
+                "modules": [
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "hahahah"
+                    },
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "bbbb"
+                    }
+                ]
+            },
+            {
+                "code": "SJYHXZ",
+                "del": false,
+                "isHide": false,
+                "menuId": 2013,
+                "name": "手机银行下载",
+                "order": "16",
+                "pid": "1003",
+                "type": 0,
+                "modules": [
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "hahahah"
+                    },
+                    {
+                        "id": "1",
+                        "code": "WYH",
+                        "name": "bbbb"
+                    }
+                ]
+            }
+        ],
+        "type": 1
+    }
+]

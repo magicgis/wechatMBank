@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yitong.weixin.modules.wechat.dao.WeixinGroupDao">
+    
+	<sql id="weixinGroupColumns">
+		a.id AS "id",
+		a.group_name AS "groupName",
+		a.group_comment AS "groupComment",
+		a.group_times AS "groupTimes",
+		a.acct_open_id AS "acctOpenId"
+	</sql>
+	
+	<sql id="weixinGroupJoins">
+	</sql>
+    
+	<select id="get" resultType="WeixinGroup">
+		SELECT 
+			<include refid="weixinGroupColumns"/>
+		FROM weixin_group a
+		<include refid="weixinGroupJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getGroupList" resultType="WeixinGroup">
+		SELECT 
+			<include refid="weixinGroupColumns"/>
+		FROM weixin_group a
+		<include refid="weixinGroupJoins"/>
+		WHERE a.group_name = #{groupName} and a.acct_open_id=#{acctOpenId}
+	</select>
+	
+	<select id="findList" resultType="WeixinGroup">
+		SELECT 
+			<include refid="weixinGroupColumns"/>
+		FROM weixin_group a
+		<include refid="weixinGroupJoins"/>
+		
+		where a.acct_open_id=#{acctOpenId}
+		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WeixinGroup">
+		SELECT 
+			<include refid="weixinGroupColumns"/>
+		FROM weixin_group a
+		<include refid="weixinGroupJoins"/>
+		where a.acct_open_id=#{acctOpenId}	
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO weixin_group(
+			id,
+			group_name,
+			group_comment,
+			group_times,
+			acct_open_id
+		) VALUES (
+			#{id},
+			#{groupName},
+			#{groupComment},
+			#{groupTimes},
+			#{acctOpenId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE weixin_group SET 	
+			group_name = #{groupName},
+			group_comment = #{groupComment},
+			group_times = #{groupTimes},
+			acct_open_id = #{acctOpenId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM weixin_group
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteAll">
+		DELETE FROM weixin_group
+		WHERE acct_open_id = #{acctOpenId}
+	</update>
+	
+</mapper>

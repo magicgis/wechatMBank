@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yitong.weixin.modules.wechat.dao.WeixinMenuListDao">
+    
+	<sql id="weixinMenuListColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.name AS "name",
+		a.super_code AS "superCode",
+		a.order_n AS "orderN",
+		a.action_type AS "actionType",
+		a.article_id AS "articleId",
+		a.url AS "url",
+		a.is_hide AS "isHide",
+		a.message AS "message",
+		a.msg_type AS "msgType",
+		a.msg_class AS "msgClass",
+		a.is_binded AS "isBinded",
+		a.keywords AS "keywords",
+		a.acct_open_id AS "acctOpenId"
+	</sql>
+	
+	<sql id="weixinMenuListJoins">
+	</sql>
+    
+	<select id="get" resultType="WeixinMenuList">
+		SELECT 
+			<include refid="weixinMenuListColumns"/>
+		FROM weixin_menu_list a
+		<include refid="weixinMenuListJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByCode" resultType="WeixinMenuList">
+		SELECT 
+			<include refid="weixinMenuListColumns"/>
+		FROM weixin_menu_list a
+		<include refid="weixinMenuListJoins"/>
+		WHERE a.code = #{code} and a.acct_open_id=#{acctOpenId}
+	</select>
+	
+	<select id="findList" resultType="WeixinMenuList">
+		SELECT 
+			<include refid="weixinMenuListColumns"/>
+		FROM weixin_menu_list a
+		<include refid="weixinMenuListJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="acctOpenId != null and acctOpenId != ''">
+			    and a.acct_open_id=#{acctOpenId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WeixinMenuList">
+		SELECT 
+			<include refid="weixinMenuListColumns"/>
+		FROM weixin_menu_list a
+		<include refid="weixinMenuListJoins"/>
+		<where>
+			<if test="acctOpenId != null and acctOpenId != ''">
+			    and a.acct_open_id=#{acctOpenId}
+			</if>
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO weixin_menu_list(
+			id,
+			code,
+			name,
+			super_code,
+			order_n,
+			action_type,
+			article_id,
+			url,
+			is_hide,
+			message,
+			msg_type,
+			msg_class,
+			is_binded,
+			keywords,
+			acct_open_id
+		) VALUES (
+			#{id},
+			#{code},
+			#{name},
+			#{superCode},
+			#{orderN},
+			#{actionType},
+			#{articleId},
+			#{url},
+			#{isHide},
+			#{message},
+			#{msgType},
+			#{msgClass},
+			#{isBinded},
+			#{keywords},
+			#{acctOpenId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE weixin_menu_list SET 	
+			code = #{code},
+			name = #{name},
+			super_code = #{superCode},
+			order_n = #{orderN},
+			action_type = #{actionType},
+			article_id = #{articleId},
+			url = #{url},
+			is_hide = #{isHide},
+			message = #{message},
+			msg_type = #{msgType},
+			msg_class = #{msgClass},
+			is_binded = #{isBinded},
+			keywords = #{keywords},
+			acct_open_id = #{acctOpenId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM weixin_menu_list
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
