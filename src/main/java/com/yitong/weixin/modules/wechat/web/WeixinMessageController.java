@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.yitong.weixin.common.config.Global;
@@ -54,16 +55,16 @@ public class WeixinMessageController extends BaseController {
 		return "modules/wechat/wx_message_list";
 	}
 	
-	/*@RequestMapping("/findPageByMsgId")
+	@RequestMapping("/findPageByMsgId")
 	@ResponseBody
-	public Page<WeixinMessage> findPageByMsgId(Long msgId, HttpServletRequest request, 
+	public Page<WeixinMessage> findPageByMsgId(String msgId, HttpServletRequest request, 
 			HttpServletResponse response) {
 		Page<WeixinMessage> page = new Page<WeixinMessage>(request, response);
 		if(null == msgId) {
 			return page;
 		}
 		return weixinMessageService.findPageByMsgId(page, msgId);
-	}*/
+	}
 
 	@RequiresPermissions("wechat:weixinMessage:view")
 	@RequestMapping(value = "form")

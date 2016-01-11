@@ -17,4 +17,5 @@ import com.yitong.weixin.modules.wechat.entity.WeixinMessage;
 @MyBatisDao
 public interface WeixinMessageDao extends CrudDao<WeixinMessage> {
 	public List<WeixinMessage> findListGroupBy(WeixinMessage message);
+	public List<WeixinMessage> findPageByMsgId(WeixinMessage message);
 }

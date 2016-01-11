@@ -79,6 +79,14 @@ public class ArticleController extends BaseController {
         model.addAttribute("page", page);
 		return "modules/cms/articleList";
 	}
+	
+	@RequestMapping(value = {"listNews"})
+	public String listNews(Article article, HttpServletRequest request, HttpServletResponse response, Model model) {
+        Page<Article> page = articleService.findPageByMsgType(new Page<Article>(request, response), article, true); 
+        model.addAttribute("page", page);
+//        model.addAttribute("article", article);
+		return "modules/cms/newsArticleList";
+	}
 
 	@RequiresPermissions("cms:article:view")
 	@RequestMapping(value = "form")

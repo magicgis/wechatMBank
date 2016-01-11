@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.yitong.weixin.common.persistence.Page;
 import com.yitong.weixin.common.service.CrudService;
 import com.yitong.weixin.common.utils.DateUtils;
-import com.yitong.weixin.common.utils.StringUtils;
 import com.yitong.weixin.modules.wechat.dao.WeixinMessageDao;
 import com.yitong.weixin.modules.wechat.entity.WeixinMessage;
 import com.yitong.weixin.modules.wechat.entity.WeixinUser;
@@ -63,6 +62,16 @@ public class WeixinMessageService extends CrudService<WeixinMessageDao, WeixinMe
 			
 		weixinMessage.setPage(page);
 		page.setList(dao.findListGroupBy(weixinMessage));
+		return page;
+	}
+	
+	public Page<WeixinMessage> findPageByMsgId(Page<WeixinMessage> page, String msgId) {
+		WeixinMessage msg = dao.get(msgId);
+		if(null == msg) {
+			throw new IllegalArgumentException(String.format("查询不到%s对应的消息", msgId));
+		}
+		msg.setPage(page);
+		page.setList(dao.findPageByMsgId(msg));
 		return page;
 	}
 	

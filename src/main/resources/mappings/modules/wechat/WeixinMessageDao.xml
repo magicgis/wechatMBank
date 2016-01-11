@@ -56,6 +56,18 @@
 		   <include refid="weixinMessageJoins"/>
 	</select>
 	
+	<select id="findPageByMsgId" resultType="WeixinMessage">
+	    SELECT 
+			<include refid="weixinMessageColumns"/>
+		FROM weixin_message a
+		<include refid="weixinMessageJoins"/>
+		 where (a.from_user = #{fromUser} and
+		       a.to_user = #{toUser})
+		    or (a.from_user = #{toUser} and
+		       a.to_user = #{fromUser})
+		 order by a.create_date desc
+	</select>
+	
 	
 	<select id="findList" resultType="WeixinMessage">
 		SELECT 
