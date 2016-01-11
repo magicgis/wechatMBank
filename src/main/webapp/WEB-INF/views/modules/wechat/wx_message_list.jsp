@@ -70,7 +70,7 @@
                     var a = 1 ;
                     $scope.getMessages=function(){
                         $("#more").html("正在加载...")
-                        $http.get('${ctx}/wxMsg/findPageByMsgId',{params: {"msgId": $scope.msgid,"pageNo":$scope.page,"pageSize": $scope.pageSize,"ie":a++},cache:false})
+                        $http.get('${ctx}/wechat/weixinMessage/findPageByMsgId',{params: {"msgId": $scope.msgid,"pageNo":$scope.page,"pageSize": $scope.pageSize,"ie":a++},cache:false})
                                 .success(function (data) {
                                     //console.log(data);
                                     $("#more").html("查看更多");
@@ -93,7 +93,7 @@
                             alert("回复信息不能为空");
                             return;
                         }
-                        
+                        alert('${pageContext.request.contextPath}');
                         $http.get('${pageContext.request.contextPath}/custom/hight', {params: {"openId": $scope.openId, "msg": $scope.replayMessage, artId: _selectedNews?_selectedNews:""}})
                                 .success(function (data) {
                                     $("#modal-message").modal('hide');
@@ -119,7 +119,7 @@
     		if(1 == type)
     			return;
     		// 如果是图文消息，显示图文消息预览列表供用户选择
-    		top.$.jBox.open("iframe:${ctx}/cms/article/listNews?pageSize=8&articleType="+(type-1), "选择图文消息",$(top.document).width()-220,$(top.document).height()-180,{
+    		top.$.jBox.open("iframe:${ctx}/cms/article/listNews?pageSize=8&msgType="+(type-1), "选择图文消息",$(top.document).width()-220,$(top.document).height()-180,{
 				buttons:{"确定":true}, loaded:function(h){
 					$(".jbox-content", top.document).css("overflow-y","hidden");
 				},submit: function(v, h, f){
