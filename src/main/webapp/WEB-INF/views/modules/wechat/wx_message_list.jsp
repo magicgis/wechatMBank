@@ -64,7 +64,6 @@
                         $scope.messages = [];
                         $scope.msgid=msgid;
                         $scope.replayMessage = '';
-                        alert(openId);
                         $scope.openId = openId;
                         $scope.getMessages();
                     };
