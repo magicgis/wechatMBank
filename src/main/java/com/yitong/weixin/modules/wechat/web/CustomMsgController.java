@@ -46,7 +46,7 @@ import com.yitong.weixin.modules.wechat.utils.WeixinUtils;
  *
  */
 @Controller
-@RequestMapping(value = "/custom")
+@RequestMapping(value = "${frontPath}/custom")
 public class CustomMsgController {
 	public static final String KeFuPostMsg = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=%s";
 	public static final String newsMsg = "https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token=%s";

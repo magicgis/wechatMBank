@@ -64,6 +64,7 @@
                         $scope.messages = [];
                         $scope.msgid=msgid;
                         $scope.replayMessage = '';
+                        alert(openId);
                         $scope.openId = openId;
                         $scope.getMessages();
                     };
@@ -93,8 +94,7 @@
                             alert("回复信息不能为空");
                             return;
                         }
-                        alert('${pageContext.request.contextPath}');
-                        $http.get('${pageContext.request.contextPath}/custom/hight', {params: {"openId": $scope.openId, "msg": $scope.replayMessage, artId: _selectedNews?_selectedNews:""}})
+                        $http.get('${cfx}/custom/hight', {params: {"openId": $scope.openId, "msg": $scope.replayMessage, artId: _selectedNews?_selectedNews:""}})
                                 .success(function (data) {
                                     $("#modal-message").modal('hide');
                                     message(data.MSG);

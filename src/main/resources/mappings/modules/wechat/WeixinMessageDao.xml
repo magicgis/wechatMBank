@@ -20,7 +20,8 @@
 		a.loc_lable AS "locLable",
 		a.function_code AS "functionCode",
 		a.create_date AS "createDate",
-		u8.user_name AS "weixinUser.userName"
+		u8.user_name AS "weixinUser.userName",
+		u8.open_id AS "weixinUser.openId"
 	</sql>
 	
 	<sql id="weixinMessageJoins">
