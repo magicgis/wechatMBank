@@ -3,6 +3,7 @@
  */
 package com.yitong.weixin.modules.wechat.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -74,15 +75,37 @@ public class WeixinGroupController extends BaseController {
 		if (!beanValidator(model, weixinGroup)){
 			return form(weixinGroup, model);
 		}
-		weixinGroupService.save(weixinGroup);
-		addMessage(redirectAttributes, "保存微信分组成功");
+		try{
+			String result = syncUpdateWeixinGroupName(weixinGroup);
+			if(WeixinUtils.parseWeixinResult(result)){
+				weixinGroupService.save(weixinGroup);
+				addMessage(redirectAttributes, "修改微信分组成功");
+			}else{
+				addMessage(redirectAttributes, "修改微信分组失败");
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			addMessage(redirectAttributes, "修改微信分组失败");
+			return "redirect:"+Global.getAdminPath()+"/wechat/weixinGroup/?repage";
+		}
 		return "redirect:"+Global.getAdminPath()+"/wechat/weixinGroup/?repage";
 	}
 	
 	@RequestMapping(value = "delete")
 	public String delete(WeixinGroup weixinGroup, RedirectAttributes redirectAttributes) {
-		weixinGroupService.delete(weixinGroup);
-		addMessage(redirectAttributes, "删除微信分组成功");
+		try{
+			String result = syncDeleteWeixinGroupName(weixinGroup);
+			if(WeixinUtils.parseWeixinResult(result)){
+				weixinGroupService.delete(weixinGroup);
+				addMessage(redirectAttributes, "删除微信分组成功");
+			}else{
+				addMessage(redirectAttributes, "删除微信分组失败");
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			addMessage(redirectAttributes, "删除微信分组失败");
+			return "redirect:"+Global.getAdminPath()+"/wechat/weixinGroup/?repage";
+		}
 		return "redirect:"+Global.getAdminPath()+"/wechat/weixinGroup/?repage";
 	}
 	
@@ -130,6 +153,43 @@ public class WeixinGroupController extends BaseController {
 		}
 		addMessage(redirectAttributes, "同步微信分组成功");
 		return "redirect:"+Global.getAdminPath()+"/wechat/weixinGroup/?repage";
+	}
+	
+	/**
+	 * 向微信服务器同步修改分组名称
+	 * @param weixinGroup
+	 * @return
+	 * @throws Exception
+	 */
+	private String syncUpdateWeixinGroupName(WeixinGroup weixinGroup) throws Exception{
+		String url=String.format("https://api.weixin.qq.com/cgi-bin/groups/update?access_token=%s",WeixinUtils.getAccessToken());
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", weixinGroup.getId());
+		map.put("name", weixinGroup.getGroupName());
+		Map<String, Object> groupMap = new HashMap<String, Object>();
+		groupMap.put("group", map);
+		String content = JSON.toJSONString(groupMap);
+		String result = WeixinUtils.postWeiXin(url, content);//向微信服务器修改分组名
+		logger.debug("向微信服务器修改分组名返回结果为------->"+result);
+		return result;
+	}
+	
+	/**
+	 * 向微信服务器同步删除分组
+	 * @param weixinGroup
+	 * @return
+	 * @throws Exception
+	 */
+	private String syncDeleteWeixinGroupName(WeixinGroup weixinGroup) throws Exception{
+		String url=String.format("https://api.weixin.qq.com/cgi-bin/groups/delete?access_token=%s",WeixinUtils.getAccessToken());
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", weixinGroup.getId());
+		Map<String, Object> groupMap = new HashMap<String, Object>();
+		groupMap.put("group", map);
+		String content = JSON.toJSONString(groupMap);
+		String result = WeixinUtils.postWeiXin(url, content);//向微信服务器删除用户分组名
+		logger.debug("向微信服务器删除用户分组名返回结果为------->"+result);
+		return result;
 	}
 	
 	

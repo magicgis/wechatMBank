@@ -94,7 +94,7 @@
 		<c:forEach items="${page.list}" var="weixinUser">
 			<tr>
 				<td style="width: 5%; text-align: center;"><input
-											type="checkbox" id="${weixinUser.id}=${weixinUser.userName}=${weixinUser.group.groupName}" name="leftCheckBox" /></td>
+											type="checkbox" id="${weixinUser.id}=${weixinUser.userName}=${weixinUser.group.groupName}=${weixinUser.openId}" name="leftCheckBox" /></td>
 				<td><a href="${ctx}/wechat/weixinUser/form?id=${weixinUser.id}">
 					${weixinUser.userName}
 				</a></td>

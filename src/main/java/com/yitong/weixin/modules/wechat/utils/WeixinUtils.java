@@ -28,6 +28,7 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.yitong.weixin.common.utils.DateUtils;
 
@@ -205,6 +206,15 @@ public class WeixinUtils {
 		
 		String url = String.format(getUserInfoUrl, getAccessToken(),openId);
 		return getWeiXin(url);
+	}
+	
+	public static boolean parseWeixinResult(String result){
+		JSONObject jsonObject = JSON.parseObject(result);
+		String str = jsonObject.getString("errcode");
+		if("0".equals(str)){
+			return true;
+		}
+		return false;
 	}
 }
 

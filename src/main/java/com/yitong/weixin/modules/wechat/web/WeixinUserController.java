@@ -3,9 +3,15 @@
  */
 package com.yitong.weixin.modules.wechat.web;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
 import com.yitong.weixin.common.config.Global;
 import com.yitong.weixin.common.persistence.Page;
 import com.yitong.weixin.common.utils.StringUtils;
@@ -106,8 +113,24 @@ public class WeixinUserController extends BaseController {
 		if (wxuBatUpdateModel.getBatUpdateGroupId() != null) {
 			groupId = wxuBatUpdateModel.getBatUpdateGroupId();
 		}
-		weixinUserService.batUserGroupUpdate(groupId, wxuBatUpdateModel.getGroupIds());
-		addMessage(redirectAttributes, "批量修改用户分组成功");
+		List<String> openIds = getUserOpenIds(wxuBatUpdateModel.getGroupIds());
+		if(openIds.size() > 50){
+			addMessage(redirectAttributes, "批量选择用户数据过多");
+			return "redirect:"+Global.getAdminPath()+"/wechat/weixinUser/?repage";
+		}
+		try{
+			String result = syncWeixinUserGroup(wxuBatUpdateModel, groupId, openIds);
+			if(WeixinUtils.parseWeixinResult(result)){
+				weixinUserService.batUserGroupUpdate(groupId, wxuBatUpdateModel.getGroupIds());
+				addMessage(redirectAttributes, "批量修改用户分组成功");
+			}else{
+				addMessage(redirectAttributes, "批量修改用户分组失败");
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			addMessage(redirectAttributes, "批量修改用户分组失败");
+			return "redirect:"+Global.getAdminPath()+"/wechat/weixinUser/?repage";
+		}
 		return "redirect:"+Global.getAdminPath()+"/wechat/weixinUser/?repage";
 	}
 
@@ -173,5 +196,34 @@ public class WeixinUserController extends BaseController {
 			findTmp.updateWeixinUser(userInfo);
 			weixinUserService.save(findTmp);
 		}
+	}
+	
+	/**
+	 * 向微信服务器批量更新用户分组
+	 * @param wxuBatUpdateModel
+	 * @param redirectAttributes
+	 * @return
+	 * @throws Exception 
+	 */
+	public String syncWeixinUserGroup(WeixinUserBatUpdateModel wxuBatUpdateModel, String groupId, List<String> openIds) throws Exception{
+		String url=String.format("https://api.weixin.qq.com/cgi-bin/groups/members/batchupdate?access_token=%s",WeixinUtils.getAccessToken());
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("openid_list", openIds);
+		map.put("to_groupid", groupId);
+		String content = JSON.toJSONString(map);
+		String result = WeixinUtils.postWeiXin(url, content);//向微信服务器更细用户分组
+		logger.debug("向微信服务器批量更新用户分组返回结果为------->"+result);
+		return result;
+	}
+	
+	private List<String> getUserOpenIds(String users){
+		List<String> list = new ArrayList<String>();
+		String[] ids = users.split(",");
+		for (int i = 0; i < ids.length; i++) {
+			String[] openIds = ids[i].split("=");
+			list.add(openIds[3]);
+		}
+		logger.debug("批量修改的所有用户openId为------->"+list.toString());
+		return list;
 	}
 }
