@@ -57,6 +57,16 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 			return EMPTY;
 		}
     }
+
+	/**
+	 * 将Object转化为String，可以指定null时的默认值
+	 * @param obj
+	 * @param defaultVal
+	 * @return
+	 */
+	public static String toString(Object obj, String defaultVal) {
+		return null == obj ? defaultVal : String.valueOf(obj);
+	}
     
     /**
      * 是否包含字符串

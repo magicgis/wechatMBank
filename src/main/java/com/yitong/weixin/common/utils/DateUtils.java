@@ -3,10 +3,12 @@
  */
 package com.yitong.weixin.common.utils;
 
-import java.text.ParseException;
-import java.util.Date;
-
 import org.apache.commons.lang3.time.DateFormatUtils;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * 日期工具类, 继承org.apache.commons.lang.time.DateUtils类
@@ -169,7 +171,57 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 		long afterTime = after.getTime();
 		return (afterTime - beforeTime) / (1000 * 60 * 60 * 24);
 	}
-	
+
+	/**
+	 * 得到当前时间，精确到天，默认为当天
+	 * @param date
+	 * @return
+	 */
+	public static Date getDateByDay(Date date) {
+		Calendar cal = Calendar.getInstance();
+		if(null != date) {
+			cal.setTime(date);
+		}
+		Calendar tmpCal = Calendar.getInstance();
+		tmpCal.clear();
+		tmpCal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+		return tmpCal.getTime();
+	}
+
+	/**
+	 * 算出提前mm（mm<=12）月的日期
+	 * @param mm
+	 * @return
+	 */
+	public static String monthStr(int mm) {
+		Date date = new Date();
+		int year = Integer.parseInt(new SimpleDateFormat("yyyy").format(date));
+		int month = Integer.parseInt(new SimpleDateFormat("MM").format(date)) - mm;
+		int day = Integer.parseInt(new SimpleDateFormat("dd").format(date));
+
+		if (month == 0) {
+			year -= 1;
+			month = 12;
+		}else if(month<0){
+			year -= 1;
+			month =month+12;
+		}else if (day > 28) {
+			if (month == 2) {
+				if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) {
+					day = 29;
+				} else
+					day = 28;
+			} else if ((month == 4 || month == 6 || month == 9 || month == 11)
+					&& day == 31) {
+				day = 30;
+			}
+		}
+		String y = year + "";
+		String m = month < 10?"0" + month : month + "";
+		String d = day < 10?"0" + day : day + "";
+		return y + "-" + m + "-" + d;
+	}
+
 	/**
 	 * @param args
 	 * @throws ParseException
