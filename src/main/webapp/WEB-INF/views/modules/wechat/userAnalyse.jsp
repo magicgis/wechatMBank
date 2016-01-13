@@ -108,7 +108,7 @@
 <body>
 	<!-- 导航栏 -->
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="javascript:void();">用户增长</a></li>
+		<li class="active"><a href="javascript:void(null);">用户增长</a></li>
 	</ul>
 
 	<!-- 主体部分 -->

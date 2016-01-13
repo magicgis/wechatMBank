@@ -184,5 +184,26 @@
 		DELETE FROM weixin_message
 		WHERE id = #{id}
 	</update>
-	
+
+	<select id="findMessageStatsList" parameterType="java.util.Map" resultType="java.util.HashMap">
+	<![CDATA[
+		SELECT t.cdate,t.msg_count,t.user_count,round(to_number(1.0 * t.msg_count / t.user_count), 2) avg_msg_count
+  			FROM (SELECT cdate,COUNT(*) msg_count,COUNT(DISTINCT from_user) user_count
+          	FROM (SELECT to_char(create_date, #{formatDate}) cdate, from_user
+                  FROM WEIXIN_MESSAGE
+    ]]>
+	<if test="startDate != null and startDate != ''">
+		<![CDATA[
+    	where create_date between #{startDate} and #{endDate}
+    	]]>
+	</if>
+	<if test="startDate == null or startDate == ''">
+		<![CDATA[
+		where create_date is not null
+		]]>
+	</if>
+	<![CDATA[
+		) GROUP BY cdate) t ORDER BY t.cdate
+	]]>
+	</select>
 </mapper>
