@@ -48,11 +48,15 @@
 		   and a.create_date = b.create_date
 		   AND a.create_date BETWEEN #{beginDate} AND #{endDate}
 		   and a.from_user in
-		       (select u.open_id from WEIXIN_USER u where u.user_name like '%'||#{weixinUser.userName}||'%')
-		   and a.from_user in (select l.from_user
-		                         from weixin_message l
-		                        where l.content like '%'||#{content}||'%'
-		                        group by l.from_user)
+		       (select u.open_id from WEIXIN_USER u 
+			
+				<if test="weixinUser.userName != null and weixinUser.userName != ''">
+					where u.user_name like '%'||#{weixinUser.userName}||'%'
+				</if>
+				)
+			 <if test="content != null and content != ''">
+				and a.content like '%'||#{content}||'%'
+			</if>
 		   order by a.create_date desc)a
 		   <include refid="weixinMessageJoins"/>
 	</select>
