@@ -4,6 +4,7 @@ import com.yitong.weixin.common.service.CrudService;
 import com.yitong.weixin.common.utils.DateUtils;
 import com.yitong.weixin.modules.wechat.dao.WeixinMessageDao;
 import com.yitong.weixin.modules.wechat.entity.WeixinMessage;
+import com.yitong.weixin.modules.wechat.utils.AcctUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -209,6 +210,7 @@ public class WeixinMessageStatsService extends CrudService<WeixinMessageDao, Wei
 		params.put("startDate",startDate);
 		params.put("endDate",DateUtils.addDays(endDate, 1));
 		params.put("formatDate",StringUtils.collectionToDelimitedString(fieldExpList, "-"));
+		params.put("acctOpenId", AcctUtils.getOpenId());
 		List<Map<String, Object>> list = dao.findMessageStatsList(params);
 		return rptType.formatList(startDate, endDate, list);
 	}

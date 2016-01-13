@@ -116,7 +116,7 @@
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
-				<form:form id="searchForm" action="${ctx}/stats/userAnalyse" method="post"
+				<form:form id="searchForm" action="${ctx}/userStats/userAnalyse" method="post"
 						  class="breadcrumb form-search" modelAttribute="wusModel">
 					<div class="controls">
 						<label class="control-label">按时间统计&nbsp;&nbsp;</label>

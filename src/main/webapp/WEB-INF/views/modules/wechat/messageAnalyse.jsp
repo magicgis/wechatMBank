@@ -172,7 +172,7 @@
 		</div>
 	</c:if>
 	<!-- 工具条按钮 -->
-	<form:form id="searchForm" action="${ctx}/wxMsgRpt/genReport" method="post"
+	<form:form id="searchForm" action="${ctx}/messageStats/messageAnalyse" method="post"
 		modelAttribute="rptModel" class="breadcrumb form-search">
 		<div class="controls">
 			<label class="control-label">分析类型：&nbsp;</label>
