@@ -5,12 +5,13 @@ import com.yitong.weixin.common.utils.DateUtils;
 import com.yitong.weixin.modules.wechat.dao.WeixinUserDao;
 import com.yitong.weixin.modules.wechat.entity.WeixinUser;
 import com.yitong.weixin.modules.wechat.model.WeixinUserStatsModel;
+import com.yitong.weixin.modules.wechat.utils.AcctUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -35,6 +36,7 @@ public class WeixinUserStatsService extends CrudService<WeixinUserDao, WeixinUse
 		long beginDate = beginTime.getTime() / 1000, endDate = endTime.getTime() / 1000;
 		params.put("beginDate",beginDate);
 		params.put("endDate",endDate);
+		params.put("acctOpenId",AcctUtils.getOpenId());
 		List<Map<String, Object>> listMap = dao.findUserListByDay(params);
 		Integer allNum = getBeginTimeAllNum(beginTime);
 		List<Map<String, Object>> formatList = getDateMap(beginTime, endTime,
@@ -156,6 +158,7 @@ public class WeixinUserStatsService extends CrudService<WeixinUserDao, WeixinUse
 	private Integer getBeginTimeAllNum(Date beginDate) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("beginTime",beginDate.getTime() / 1000);// 数据库中时间戳精确到秒
+		params.put("acctOpenId",AcctUtils.getOpenId());
 		List<Map<String, Object>> map = dao.fingUserNumByTime(params);
 		Integer allCount = 0;// 累计总数
 		if (map != null) {
