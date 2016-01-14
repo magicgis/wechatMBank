@@ -108,7 +108,7 @@
 <body>
 	<!-- 导航栏 -->
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="javascript:void();">用户增长</a></li>
+		<li class="active"><a href="javascript:void(null);">用户增长</a></li>
 	</ul>
 
 	<!-- 主体部分 -->
@@ -116,7 +116,7 @@
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
-				<form:form id="searchForm" action="${ctx}/stats/userAnalyse" method="post"
+				<form:form id="searchForm" action="${ctx}/userStats/userAnalyse" method="post"
 						  class="breadcrumb form-search" modelAttribute="wusModel">
 					<div class="controls">
 						<label class="control-label">按时间统计&nbsp;&nbsp;</label>

@@ -18,7 +18,7 @@ import java.util.Map;
  * Created by jz on 2016/1/11 16:26
  **/
 @Controller
-@RequestMapping(value="${adminPath}/stats")
+@RequestMapping(value="${adminPath}/userStats")
 public class WeixinUserStatsController extends BaseController {
 
     @Resource
@@ -67,7 +67,7 @@ public class WeixinUserStatsController extends BaseController {
         return "modules/wechat/userAnalyse";
     }
 
-    @RequestMapping(value="/userStats")
+    @RequestMapping(value="/default")
     public String getUserStas(Model model){
         return userStats(WeixinUserStatsModel.getDefaultWusModel(),model);
     }

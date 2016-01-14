@@ -195,34 +195,46 @@
 
 	<select id="findUserListByDay" parameterType="java.util.Map" resultType="java.util.HashMap" >
 		<![CDATA[
-		select a.dateInfo,coalesce(b.user_count, 0) dayAddNum,coalesce(c.user_count, 0) dayCancelNum,
-    (coalesce(b.user_count, 0) - coalesce(c.user_count, 0)) dayLeaveNum
-    from (select *
-    		from (select to_number(a.subscribe_time) dateInfo
-    			from weixin_user a
-  					where to_number(a.subscribe_time) >= #{beginDate}
-                   	and to_number(a.subscribe_time) < #{endDate}) m
-    union
-        select * from (select to_number(a.cancel_subscribe_time) dateInfo
-                  from weixin_user a
-                 where to_number(a.cancel_subscribe_time) >= #{beginDate}
-                   and to_number(a.cancel_subscribe_time) < #{endDate}) n) a
-  left join (select cdate, count(distinct open_id) user_count
-               from (select to_number(a.subscribe_time) cdate, a.open_id
-                       from weixin_user a
-                      where to_number(a.subscribe_time) >= #{beginDate}
-                        and to_number(a.subscribe_time) < #{endDate})
-              group by cdate) b
-    on a.dateInfo = b.cdate
-  left join (select cdate, count(distinct open_id) user_count
-               from (select to_number(a.cancel_subscribe_time) cdate,
-                            a.open_id
-                       from weixin_user a
-                      where to_number(a.cancel_subscribe_time) >= #{beginDate}
-                        and to_number(a.cancel_subscribe_time) < #{endDate})
-              group by cdate) c
-    on a.dateInfo = c.cdate
- order by a.dateInfo
+			select a.dateInfo,coalesce(b.user_count, 0) dayAddNum,coalesce(c.user_count, 0) dayCancelNum,
+			(coalesce(b.user_count, 0) - coalesce(c.user_count, 0)) dayLeaveNum
+			from (select * from (select to_number(a.subscribe_time) dateInfo from weixin_user a
+				where to_number(a.subscribe_time) >= #{beginDate} and to_number(a.subscribe_time) < #{endDate}
+        ]]>
+		<if test="acctOpenId != null and acctOpenId != ''">
+		<![CDATA[
+			and a.acct_open_id = #{acctOpenId}
+		]]>
+		</if>
+		<![CDATA[
+        	) m union select * from (select to_number(a.cancel_subscribe_time) dateInfo from weixin_user a
+			where to_number(a.cancel_subscribe_time) >= #{beginDate} and to_number(a.cancel_subscribe_time) < #{endDate}
+		]]>
+		<if test="acctOpenId != null and acctOpenId != ''">
+			<![CDATA[
+			and a.acct_open_id = #{acctOpenId}
+		]]>
+		</if>
+		<![CDATA[
+		   ) n) a join (select cdate, count(distinct open_id) user_count from (select to_number(a.subscribe_time) cdate, a.open_id
+		   from weixin_user a where to_number(a.subscribe_time) >= #{beginDate} and to_number(a.subscribe_time) < #{endDate}
+		]]>
+		<if test="acctOpenId != null and acctOpenId != ''">
+			<![CDATA[
+			and a.acct_open_id = #{acctOpenId}
+		]]>
+		</if>
+		<![CDATA[
+		   ) group by cdate) b on a.dateInfo = b.cdate left join (select cdate, count(distinct open_id) user_count
+		   from (select to_number(a.cancel_subscribe_time) cdate,a.open_id from weixin_user a
+		   where to_number(a.cancel_subscribe_time) >= #{beginDate} and to_number(a.cancel_subscribe_time) < #{endDate}
+		]]>
+		<if test="acctOpenId != null and acctOpenId != ''">
+			<![CDATA[
+			and a.acct_open_id = #{acctOpenId}
+		]]>
+		</if>
+		<![CDATA[
+		   ) group by cdate) c on a.dateInfo = c.cdate order by a.dateInfo
 		]]>
 	</select>
 
@@ -231,5 +243,10 @@
 		select count(open_id) allNum from weixin_user n where n.cancel_subscribe_time is null
 			and to_number(n.subscribe_time) <= #{beginTime}
 		]]>
+		<if test="acctOpenId != null and acctOpenId != ''">
+		<![CDATA[
+			and n.acct_open_id = #{acctOpenId}
+		]]>
+		</if>
 	</select>
 </mapper>
