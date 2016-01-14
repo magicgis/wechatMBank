@@ -7,16 +7,16 @@ import java.util.Date;
 public class WeixinUserStatsModel {
 	private Date beginDate;
 	private Date endDate;
-	private Integer statsWay = -30;
+	private Integer statsWay = -7;
 
 	public static WeixinUserStatsModel getDefaultWusModel() {
 		Date date = DateUtils.getDateByDay(null);
-		return new WeixinUserStatsModel(DateUtils.addMonths(date, -1), date);
+		return new WeixinUserStatsModel(DateUtils.addDays(date, -7), date);
 	}
 
 	public static WeixinUserStatsModel getYesterdayWusModel() {
 		Date date = DateUtils.getDateByDay(null);
-		Date yesterday = DateUtils.addDays(DateUtils.getDateByDay(null), -1);
+		Date yesterday = DateUtils.addDays(date, -1);
 		return new WeixinUserStatsModel(yesterday, date);
 	}
 
