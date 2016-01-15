@@ -183,14 +183,14 @@ public class WeixinUserStatsService extends CrudService<WeixinUserDao, WeixinUse
 		}
 
 		for (int i = 0; i < list.size(); i++) {
+			BigDecimal leaveNum = (BigDecimal) (list.get(i)
+					.get(DAY_LEAVE_NUM) == null ? BigDecimal.ZERO : (BigDecimal) list.get(
+					i).get(DAY_LEAVE_NUM));
 			if (i == 0) {
-				list.get(i).put(ALLNUM, new BigDecimal(startNum));
+				list.get(i).put(ALLNUM, new BigDecimal(startNum).add(leaveNum));
 			} else {
 				BigDecimal lastAllNum = (BigDecimal) (list.get(i - 1).get(ALLNUM) == null ? BigDecimal.ZERO
 						: list.get(i - 1).get(ALLNUM));
-				BigDecimal leaveNum = (BigDecimal) (list.get(i)
-						.get(DAY_LEAVE_NUM) == null ? BigDecimal.ZERO : (BigDecimal) list.get(
-						i).get(DAY_LEAVE_NUM));
 				list.get(i).put(ALLNUM, lastAllNum.add(leaveNum));
 			}
 		}

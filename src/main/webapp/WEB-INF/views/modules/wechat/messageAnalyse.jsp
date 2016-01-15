@@ -177,7 +177,7 @@
 		<div class="controls">
 			<label class="control-label">分析类型：&nbsp;</label>
 			<form:select id="rpt_type" path="type" items="${rptModel.msgRptList}" itemLabel="label"
-			itemValue="name" onchange="selectChange()"/><br><br>
+			itemValue="name" onchange="selectChange()"/>
 			<label class="control-label">按时间统计：&nbsp;</label>
 			<fmt:formatDate value="${rptModel.startDate}" var="startDate" pattern="yyyy-MM-dd" />
 			<form:input id="startDate" path="startDate" value="${startDate}" type="text"
