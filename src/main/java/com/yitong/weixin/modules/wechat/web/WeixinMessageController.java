@@ -12,14 +12,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.yitong.weixin.common.config.Global;
 import com.yitong.weixin.common.persistence.Page;
+import com.yitong.weixin.common.utils.DateUtils;
 import com.yitong.weixin.common.utils.StringUtils;
+import com.yitong.weixin.common.utils.excel.ExportExcel;
 import com.yitong.weixin.common.web.BaseController;
+import com.yitong.weixin.modules.sys.entity.User;
 import com.yitong.weixin.modules.wechat.entity.WeixinMessage;
 import com.yitong.weixin.modules.wechat.service.WeixinMessageService;
 
@@ -91,5 +95,27 @@ public class WeixinMessageController extends BaseController {
 		addMessage(redirectAttributes, "删除消息成功");
 		return "redirect:"+Global.getAdminPath()+"/wechat/weixinMessage/?repage";
 	}
+	
+	/**
+	 * 导出消息数据
+	 * @param user
+	 * @param request
+	 * @param response
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequiresPermissions("wechat:weixinMessage:edit")
+    @RequestMapping(value = "export", method=RequestMethod.POST)
+    public String exportFile(WeixinMessage message, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
+		try {
+            String fileName = "消息数据"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
+            Page<WeixinMessage> page = weixinMessageService.findPageGroupBy(new Page<WeixinMessage>(request, response, -1), message);
+    		new ExportExcel("消息数据", WeixinMessage.class).setDataList(page.getList()).write(response, fileName).dispose();
+    		return null;
+		} catch (Exception e) {
+			addMessage(redirectAttributes, "导出消息失败！失败信息："+e.getMessage());
+		}
+		return "redirect:"+Global.getAdminPath()+"/wechat/weixinMessage/?repage";
+    }
 
 }
