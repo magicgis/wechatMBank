@@ -50,7 +50,7 @@
 	
 	// 改变时间区间
 	function changeTimeArea(n) {
-		var endDatePicker = datePicker(0);//结束时间
+		var endDatePicker = datePicker(-1);//结束时间
 		var startDatePicker = datePicker(n);
 		$("#endDate").val(endDatePicker);//查询结束时间插件赋值
 		$("#startDate").val(startDatePicker);//查询开始时间插件赋值
@@ -151,17 +151,17 @@
 							<tr>
 								<td style="width: 33%; text-align: center;" rowspan="6">
 									<h5>消息发送人数</h5>
-									<h3>${yesterday.USER_COUNT > 0 ? yesterday.USER_COUNT : 0}</h3>
+									<h3>${yesterday.USER_COUNT ==null ? 0 : yesterday.USER_COUNT}</h3>
 									<!-- 日&nbsp;&nbsp;--<br /> 周&nbsp;&nbsp;--<br /> 月&nbsp;&nbsp;--<br /> -->
 								</td>
 								<td style="width: 33%; text-align: center;" rowspan="6">
 									<h5>消息发送次数</h5>
-									<h3>${yesterday.MSG_COUNT > 0 ? yesterday.MSG_COUNT : 0}</h3>
+									<h3>${yesterday.MSG_COUNT ==null ?  0 : yesterday.MSG_COUNT}</h3>
 									<!-- 日&nbsp;&nbsp;--<br /> 周&nbsp;&nbsp;--<br /> 月&nbsp;&nbsp;--<br /> -->
 								</td>
 								<td style="width: 34%; text-align: center;" rowspan="6">
 									<h5>人均发送次数</h5>
-									<h3>${yesterday.AVG_MSG_COUNT > 0 ? yesterday.AVG_MSG_COUNT : 0}</h3> 
+									<h3>${yesterday.AVG_MSG_COUNT ==null ? 0 : yesterday.AVG_MSG_COUNT}</h3>
 									<!-- 日&nbsp;&nbsp;--<br />周&nbsp;&nbsp;--<br /> 月&nbsp;&nbsp;--<br /> -->
 								</td>
 							</tr>

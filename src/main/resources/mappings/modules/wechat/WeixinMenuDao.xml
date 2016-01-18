@@ -130,12 +130,12 @@
 				and a.to_user = #{acctOpenId}
 		    ]]>
 		</if>
-		<if test="startDate != null and startDate != ''">
+		<if test="beginDate != null and beginDate != ''">
 			<![CDATA[
-    			and to_number(a.chick_time) >= #{startDate} and to_number(a.chick_time) <#{endDate}
+    			and to_number(a.chick_time) >= #{beginDate} and to_number(a.chick_time) <#{endDate}
     		]]>
 		</if>
-		<if test="startDate == null or startDate == ''">
+		<if test="beginDate == null or beginDate == ''">
 			<![CDATA[
 				and a.chick_time is not null
 			]]>

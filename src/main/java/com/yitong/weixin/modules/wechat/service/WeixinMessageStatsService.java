@@ -115,7 +115,7 @@ public class WeixinMessageStatsService extends CrudService<WeixinMessageDao, Wei
 			Calendar indexCal = Calendar.getInstance();
 			indexCal.setTime(startCal.getTime());
 			boolean hasMore = listIte.hasNext();
-			while(indexCal.getTime().before(endDate) || hasMore) {
+			while(indexCal.getTime().before(DateUtils.addDays(endDate, 1)) || hasMore) {
 				Map<String, Object> e = null;
 				Date cdate = null;
 				if(hasMore) {

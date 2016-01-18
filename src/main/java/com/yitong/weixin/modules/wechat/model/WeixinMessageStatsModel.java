@@ -14,7 +14,7 @@ public class WeixinMessageStatsModel {
 	 */
 	public static WeixinMessageStatsModel getDefaultMessageStatsModel() {
 		Date date = DateUtils.getDateByDay(null);
-		WeixinMessageStatsModel rs = new WeixinMessageStatsModel(RptFieldEnum.DAY_OF_MONTH, DateUtils.addDays(date, -7), date);
+		WeixinMessageStatsModel rs = new WeixinMessageStatsModel(RptFieldEnum.DAY_OF_MONTH, DateUtils.addDays(date, -7), DateUtils.addDays(date, -1));
 		return rs;
 	}
 
@@ -24,7 +24,7 @@ public class WeixinMessageStatsModel {
 	 */
 	public static WeixinMessageStatsModel getYesterdayMessageStatsModel() {
 		Date date = DateUtils.getDateByDay(null);
-		WeixinMessageStatsModel rs = new WeixinMessageStatsModel(RptFieldEnum.DAY_OF_MONTH, DateUtils.addDays(date, -1), date);
+		WeixinMessageStatsModel rs = new WeixinMessageStatsModel(RptFieldEnum.DAY_OF_MONTH, DateUtils.addDays(date, -1), DateUtils.addDays(date, -1));
 		return rs;
 	}
 

@@ -10,10 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by jz on 2016/1/11 16:26
@@ -37,7 +34,7 @@ public class WeixinMessageStatsController extends BaseController {
 			WeixinMessageStatsModel yesRptModel = WeixinMessageStatsModel.getYesterdayMessageStatsModel();
 			List<Map<String, Object>> yesterdayList = weixinMessageStatsService.genReportByCalType(yesRptModel.getType(),
 					yesRptModel.getStartDate(), yesRptModel.getEndDate());
-			model.addAttribute("yesterday", yesterdayList.get(0));
+			model.addAttribute("yesterday", yesterdayList.size()>0?yesterdayList.get(0):new HashMap<String,Object>());
 		}
 		
 		List<Map<String, Object>> list = weixinMessageStatsService.genReportByCalType(rptModel.getType(),
