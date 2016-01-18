@@ -83,6 +83,7 @@
 		<thead>
 			<tr>
 				<th style="width: 5%; text-align: center;"><input id="allCheckBox" name="leftCheckBox" type="checkbox" /></th>
+				<th>用户头像</th>
 				<th>用户昵称</th>
 				<th>用户分组</th>
 				<th>用户最近访问时间</th>
@@ -95,6 +96,11 @@
 			<tr>
 				<td style="width: 5%; text-align: center;"><input
 											type="checkbox" id="${weixinUser.id}=${weixinUser.userName}=${weixinUser.group.groupName}=${weixinUser.openId}" name="leftCheckBox" /></td>
+				<td style="width: 80px; height: 80px;">
+					<div class="thumbnail">
+			   			<img style="width: 80px; height: 80px;" src="${weixinUser.headImgUrl }"/>
+				   	</div>
+				</td>
 				<td><a href="${ctx}/wechat/weixinUser/form?id=${weixinUser.id}">
 					${weixinUser.userName}
 				</a></td>

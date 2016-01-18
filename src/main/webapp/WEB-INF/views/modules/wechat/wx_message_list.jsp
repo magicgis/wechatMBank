@@ -186,9 +186,9 @@
             		alert("日期范围跨度不能超过90天！");
             		return;
             	}
-				top.$.jBox.confirm("确认要导出用户数据吗？","系统提示",function(v,h,f){
+				top.$.jBox.confirm("确认要导出消息数据吗？","系统提示",function(v,h,f){
 					if(v=="ok"){
-						$("#searchForm").attr("action","${ctx}/wxMsg/export");
+						$("#searchForm").attr("action","${ctx}/wechat/weixinMessage/export");
 						$("#searchForm").submit();
 					}
 				},{buttonsFocus:1});
