@@ -7,9 +7,10 @@
 		a.template_id AS "templateId",
 		a.template_code AS "templateCode",
 		a.title AS "title",
-		a.main_industry AS "mainIndustry",
-		a.secondary_industry AS "secondaryIndustry",
+		a.primary_industry AS "primaryIndustry",
+		a.deputy_industry AS "deputyIndustry",
 		a.content AS "content",
+		a.example AS "example",
 		a.acct_open_id AS "acctOpenId"
 	</sql>
 	
@@ -29,8 +30,6 @@
 			<include refid="weixinMessageTemplateColumns"/>
 		FROM weixin_message_template a
 		<include refid="weixinMessageTemplateJoins"/>
-		
-		where a.acct_open_id=#{acctOpenId}
 		<where>
 			
 			<if test="title != null and title != ''">
@@ -54,8 +53,9 @@
 			<include refid="weixinMessageTemplateColumns"/>
 		FROM weixin_message_template a
 		<include refid="weixinMessageTemplateJoins"/>
-		where a.acct_open_id=#{acctOpenId}
+		<where>
 			
+		</where>		
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}
@@ -71,30 +71,32 @@
 			template_id,
 			template_code,
 			title,
-			main_industry,
-			secondary_industry,
+			primary_industry,
+			deputy_industry,
 			content,
+			example,
 			acct_open_id
 		) VALUES (
 			#{id},
 			#{templateId},
 			#{templateCode},
 			#{title},
-			#{mainIndustry},
-			#{secondaryIndustry},
+			#{primaryIndustry},
+			#{deputyIndustry},
 			#{content},
+			#{example},
 			#{acctOpenId}
 		)
 	</insert>
 	
 	<update id="update">
 		UPDATE weixin_message_template SET 	
-			template_id = #{templateId},
-			template_code = #{templateCode},
 			title = #{title},
-			main_industry = #{mainIndustry},
-			secondary_industry = #{secondaryIndustry},
-			content = #{content}
+			primary_industry = #{primaryIndustry},
+			deputy_industry = #{deputyIndustry},
+			content = #{content},
+			example = #{example},
+			acct_open_id = #{acctOpenId}
 		WHERE id = #{id}
 	</update>
 	

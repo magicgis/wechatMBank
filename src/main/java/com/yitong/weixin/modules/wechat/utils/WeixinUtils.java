@@ -224,8 +224,6 @@ public class WeixinUtils {
 class AccessToken {
 	private WeixinAccessTokenService weixinAccessTokenService = SpringContextHolder.getBean("weixinAccessTokenService");
 	
-	private static final String acctOpenId = AcctUtils.getOpenId();
-	
 //	private String access_token;	// 有效token  
 //    private Date expires_in;  		// 有效期,获取token时间+过期时间
 	
@@ -242,7 +240,7 @@ class AccessToken {
     	Calendar cal = Calendar.getInstance();
     	cal.add(Calendar.SECOND, Integer.parseInt(expires_in)-10);
 //    	this.expires_in = cal.getTime();
-    	WeixinAccessToken weixinAccessToken = weixinAccessTokenService.getAccessTokenByOpenId(acctOpenId);
+    	WeixinAccessToken weixinAccessToken = weixinAccessTokenService.getAccessTokenByOpenId(AcctUtils.getOpenId());
     	if(weixinAccessToken == null){
     		weixinAccessToken = new WeixinAccessToken();
     	}
@@ -261,7 +259,7 @@ class AccessToken {
     public boolean isExpired()
     {
     	// 第一次使用，过期
-    	WeixinAccessToken weixinAccessToken = weixinAccessTokenService.getAccessTokenByOpenId(acctOpenId);
+    	WeixinAccessToken weixinAccessToken = weixinAccessTokenService.getAccessTokenByOpenId(AcctUtils.getOpenId());
     	if(weixinAccessToken == null){
     		return true;
     	}
@@ -275,7 +273,7 @@ class AccessToken {
     
     public String getToken()
     {
-    	WeixinAccessToken weixinAccessToken = weixinAccessTokenService.getAccessTokenByOpenId(acctOpenId);
+    	WeixinAccessToken weixinAccessToken = weixinAccessTokenService.getAccessTokenByOpenId(AcctUtils.getOpenId());
     	return weixinAccessToken.getAccessToken();
     }
     

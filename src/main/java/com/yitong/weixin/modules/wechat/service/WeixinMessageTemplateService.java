@@ -11,13 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.yitong.weixin.common.persistence.Page;
 import com.yitong.weixin.common.service.CrudService;
 import com.yitong.weixin.modules.wechat.entity.WeixinMessageTemplate;
-import com.yitong.weixin.modules.wechat.utils.AcctUtils;
 import com.yitong.weixin.modules.wechat.dao.WeixinMessageTemplateDao;
 
 /**
  * 微信模板消息存储表Service
  * @author hf
- * @version 2016-01-14
+ * @version 2016-01-18
  */
 @Service
 @Transactional(readOnly = true)
@@ -28,18 +27,15 @@ public class WeixinMessageTemplateService extends CrudService<WeixinMessageTempl
 	}
 	
 	public List<WeixinMessageTemplate> findList(WeixinMessageTemplate weixinMessageTemplate) {
-		weixinMessageTemplate.setAcctOpenId(AcctUtils.getOpenId());//多公众帐号
 		return super.findList(weixinMessageTemplate);
 	}
 	
 	public Page<WeixinMessageTemplate> findPage(Page<WeixinMessageTemplate> page, WeixinMessageTemplate weixinMessageTemplate) {
-		weixinMessageTemplate.setAcctOpenId(AcctUtils.getOpenId());//多公众帐号
 		return super.findPage(page, weixinMessageTemplate);
 	}
 	
 	@Transactional(readOnly = false)
 	public void save(WeixinMessageTemplate weixinMessageTemplate) {
-		weixinMessageTemplate.setAcctOpenId(AcctUtils.getOpenId());//多公众帐号
 		super.save(weixinMessageTemplate);
 	}
 	
