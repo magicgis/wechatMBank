@@ -31,6 +31,9 @@ import javax.net.ssl.X509TrustManager;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.yitong.weixin.common.utils.DateUtils;
+import com.yitong.weixin.common.utils.SpringContextHolder;
+import com.yitong.weixin.modules.wechat.entity.WeixinAccessToken;
+import com.yitong.weixin.modules.wechat.service.WeixinAccessTokenService;
 
 /**
  * @ClassName: WeixinUtils
@@ -55,8 +58,8 @@ public class WeixinUtils {
     **/
 	public static String getAccessToken() throws Exception{
 		final String accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token";
-		System.out.println("cur_token = [" + accessToken.getToken() + "| isExpired = " + accessToken.isExpired() + "]");
-		//if(accessToken.isExpired())
+//		System.out.println("cur_token = [" + accessToken.getToken() + "| isExpired = " + accessToken.isExpired() + "]");
+		if(accessToken.isExpired())
 		{
 			String acctokenUrl = accessTokenUrl+"?grant_type=client_credential" + "&appid="+AcctUtils.getAcct().getAppId()+"&secret="+AcctUtils.getAcct().getAppSercet();
 			String result = getWeiXin(acctokenUrl);
@@ -219,9 +222,12 @@ public class WeixinUtils {
 }
 
 class AccessToken {
+	private WeixinAccessTokenService weixinAccessTokenService = SpringContextHolder.getBean("weixinAccessTokenService");
 	
-	private String access_token;	// 有效token  
-    private Date expires_in;  		// 有效期,获取token时间+过期时间
+	private static final String acctOpenId = AcctUtils.getOpenId();
+	
+//	private String access_token;	// 有效token  
+//    private Date expires_in;  		// 有效期,获取token时间+过期时间
 	
     /**
     * @Title: setToken
@@ -232,10 +238,18 @@ class AccessToken {
      */
     public void setToken(String token, String expires_in)
     {
-    	this.access_token = token;
+//    	this.access_token = token;
     	Calendar cal = Calendar.getInstance();
     	cal.add(Calendar.SECOND, Integer.parseInt(expires_in)-10);
-    	this.expires_in = cal.getTime();
+//    	this.expires_in = cal.getTime();
+    	WeixinAccessToken weixinAccessToken = weixinAccessTokenService.getAccessTokenByOpenId(acctOpenId);
+    	if(weixinAccessToken == null){
+    		weixinAccessToken = new WeixinAccessToken();
+    	}
+    	weixinAccessToken.setAccessToken(token);
+    	weixinAccessToken.setExpiresIn(cal.getTime());
+    	weixinAccessToken.setAcctOpenId(AcctUtils.getOpenId());
+    	weixinAccessTokenService.save(weixinAccessToken);
     }
     /**
      * 
@@ -246,13 +260,14 @@ class AccessToken {
      */
     public boolean isExpired()
     {
-    	System.out.println("expires_in = [" + expires_in + "]");
     	// 第一次使用，过期
-    	if(null == expires_in)
+    	WeixinAccessToken weixinAccessToken = weixinAccessTokenService.getAccessTokenByOpenId(acctOpenId);
+    	if(weixinAccessToken == null){
     		return true;
+    	}
     	// 现在时间在过期时间之后，认为过期
     	Calendar cal=Calendar.getInstance();
-    	cal.setTime(expires_in);
+    	cal.setTime(weixinAccessToken.getExpiresIn());
     	if(Calendar.getInstance().after(cal))
     		return true;
     	return false;
@@ -260,7 +275,8 @@ class AccessToken {
     
     public String getToken()
     {
-    	return this.access_token;
+    	WeixinAccessToken weixinAccessToken = weixinAccessTokenService.getAccessTokenByOpenId(acctOpenId);
+    	return weixinAccessToken.getAccessToken();
     }
     
 }

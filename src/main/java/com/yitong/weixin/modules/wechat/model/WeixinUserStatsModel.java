@@ -11,13 +11,12 @@ public class WeixinUserStatsModel {
 
 	public static WeixinUserStatsModel getDefaultWusModel() {
 		Date date = DateUtils.getDateByDay(null);
-		return new WeixinUserStatsModel(DateUtils.addDays(date, -7), date);
+		return new WeixinUserStatsModel(DateUtils.addDays(date, -7), DateUtils.addDays(date, -1));
 	}
 
 	public static WeixinUserStatsModel getYesterdayWusModel() {
 		Date date = DateUtils.getDateByDay(null);
-		Date yesterday = DateUtils.addDays(date, -1);
-		return new WeixinUserStatsModel(yesterday, date);
+		return new WeixinUserStatsModel(DateUtils.addDays(date, -1), DateUtils.addDays(date, -1));
 	}
 
 	public WeixinUserStatsModel(Date beginDate, Date endDate) {

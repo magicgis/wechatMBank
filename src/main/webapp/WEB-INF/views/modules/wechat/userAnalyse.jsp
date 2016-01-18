@@ -45,7 +45,7 @@
 	$(document).ready(function(){
 		//动态改变日期框
 		$("input[name='statsWay']").click(function(){
-			var endDatePicker = datePicker(0);//结束时间
+			var endDatePicker = datePicker(-1);//结束时间
 			var beginDatePicker = datePicker(parseInt($(this).val()));;//开始时间
 			$("#endDate").val(endDatePicker);//查询结束时间插件赋值
 			$("#beginDate").val(beginDatePicker);//查询开始时间插件赋值
