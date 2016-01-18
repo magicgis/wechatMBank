@@ -60,7 +60,7 @@
 		<div class="control-group">
 			<label class="control-label">示例：</label>
 			<div class="controls">
-				<form:input path="example" htmlEscape="false" maxlength="1024" class="input-xlarge "/>
+				<form:textarea path="example" htmlEscape="false" rows="4" maxlength="1024" class="input-xxlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
