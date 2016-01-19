@@ -34,18 +34,6 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">模板ID：</label>
-			<div class="controls">
-				<form:input path="templateId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">模板编码：</label>
-			<div class="controls">
-				<form:input path="templateCode" htmlEscape="false" maxlength="32" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
 			<label class="control-label">标题：</label>
 			<div class="controls">
 				<form:input path="title" htmlEscape="false" maxlength="32" class="input-xlarge "/>
@@ -54,19 +42,31 @@
 		<div class="control-group">
 			<label class="control-label">主行业：</label>
 			<div class="controls">
-				<form:input path="mainIndustry" htmlEscape="false" maxlength="32" class="input-xlarge "/>
+				<form:input path="primaryIndustry" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">副行业：</label>
 			<div class="controls">
-				<form:input path="secondaryIndustry" htmlEscape="false" maxlength="32" class="input-xlarge "/>
+				<form:input path="deputyIndustry" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">内容：</label>
 			<div class="controls">
 				<form:textarea path="content" htmlEscape="false" rows="4" maxlength="1024" class="input-xxlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">示例：</label>
+			<div class="controls">
+				<form:textarea path="example" htmlEscape="false" rows="4" maxlength="1024" class="input-xxlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">微信号：</label>
+			<div class="controls">
+				<form:input path="acctOpenId" htmlEscape="false" maxlength="32" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="form-actions">

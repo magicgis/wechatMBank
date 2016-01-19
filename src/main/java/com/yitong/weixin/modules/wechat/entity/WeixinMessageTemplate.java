@@ -10,7 +10,7 @@ import com.yitong.weixin.common.persistence.DataEntity;
 /**
  * 微信模板消息存储表Entity
  * @author hf
- * @version 2016-01-14
+ * @version 2016-01-18
  */
 public class WeixinMessageTemplate extends DataEntity<WeixinMessageTemplate> {
 	
@@ -18,10 +18,11 @@ public class WeixinMessageTemplate extends DataEntity<WeixinMessageTemplate> {
 	private String templateId;		// 模板ID
 	private String templateCode;		// 模板编码
 	private String title;		// 标题
-	private String mainIndustry;		// 主行业
-	private String secondaryIndustry;		// 副行业
+	private String primaryIndustry;		// 主行业
+	private String deputyIndustry;		// 副行业
 	private String content;		// 内容
-	private String acctOpenId;		// 公众号
+	private String example;		// 示例
+	private String acctOpenId;		// 微信号
 	
 	public WeixinMessageTemplate() {
 		super();
@@ -31,7 +32,7 @@ public class WeixinMessageTemplate extends DataEntity<WeixinMessageTemplate> {
 		super(id);
 	}
 
-	@Length(min=0, max=64, message="模板ID长度必须介于 0 和 64 之间")
+	@Length(min=0, max=128, message="模板ID长度必须介于 0 和 128 之间")
 	public String getTemplateId() {
 		return templateId;
 	}
@@ -58,22 +59,22 @@ public class WeixinMessageTemplate extends DataEntity<WeixinMessageTemplate> {
 		this.title = title;
 	}
 	
-	@Length(min=0, max=32, message="主行业长度必须介于 0 和 32 之间")
-	public String getMainIndustry() {
-		return mainIndustry;
+	@Length(min=0, max=64, message="主行业长度必须介于 0 和 64 之间")
+	public String getPrimaryIndustry() {
+		return primaryIndustry;
 	}
 
-	public void setMainIndustry(String mainIndustry) {
-		this.mainIndustry = mainIndustry;
+	public void setPrimaryIndustry(String primaryIndustry) {
+		this.primaryIndustry = primaryIndustry;
 	}
 	
-	@Length(min=0, max=32, message="副行业长度必须介于 0 和 32 之间")
-	public String getSecondaryIndustry() {
-		return secondaryIndustry;
+	@Length(min=0, max=64, message="副行业长度必须介于 0 和 64 之间")
+	public String getDeputyIndustry() {
+		return deputyIndustry;
 	}
 
-	public void setSecondaryIndustry(String secondaryIndustry) {
-		this.secondaryIndustry = secondaryIndustry;
+	public void setDeputyIndustry(String deputyIndustry) {
+		this.deputyIndustry = deputyIndustry;
 	}
 	
 	@Length(min=0, max=1024, message="内容长度必须介于 0 和 1024 之间")
@@ -85,7 +86,16 @@ public class WeixinMessageTemplate extends DataEntity<WeixinMessageTemplate> {
 		this.content = content;
 	}
 	
-	@Length(min=0, max=32, message="公众号长度必须介于 0 和 32 之间")
+	@Length(min=0, max=1024, message="示例长度必须介于 0 和 1024 之间")
+	public String getExample() {
+		return example;
+	}
+
+	public void setExample(String example) {
+		this.example = example;
+	}
+	
+	@Length(min=0, max=32, message="微信号长度必须介于 0 和 32 之间")
 	public String getAcctOpenId() {
 		return acctOpenId;
 	}

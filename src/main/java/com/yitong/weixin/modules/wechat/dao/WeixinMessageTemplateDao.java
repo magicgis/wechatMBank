@@ -10,7 +10,7 @@ import com.yitong.weixin.modules.wechat.entity.WeixinMessageTemplate;
 /**
  * 微信模板消息存储表DAO接口
  * @author hf
- * @version 2016-01-14
+ * @version 2016-01-18
  */
 @MyBatisDao
 public interface WeixinMessageTemplateDao extends CrudDao<WeixinMessageTemplate> {
