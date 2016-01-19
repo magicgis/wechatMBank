@@ -10,6 +10,7 @@
     <title>用户分析</title>
     <script src="${ctxStatic}/highcharts/highcharts.js" type="text/javascript"></script>
     <script type="text/javascript">
+
         //计算日期之间的脚本
         function datePicker(index){
             var timePicker = new Date();
@@ -21,6 +22,14 @@
             var date = timePicker.getDate();
             return year+"-"+(month<10?"0"+month:month)+"-"+(date<10?"0"+date:date);
         }
+
+        //改变表格tab页
+        $('.statsTab').live('click',function(i,e){
+            $(".statsTab").removeClass("active");
+            $(this).addClass("active");
+            buildContainer($(this).index());
+        });
+
 
         //表单提交
         function checkAndSubmit(){
@@ -37,19 +46,67 @@
                     top.$.jBox.tip('最多只能查询最近1年记录', 'warning');
                     return false;
                 }
-//                $('#searchForm').submit();
+                $('#searchForm').submit();
                 return true;
+            }
+        }
+
+        //绘制图表
+        function buildContainer(n){
+            var temp = n==0?${chickCountList}:n==1?${userCountList}:${avgChickCountList};
+            console.dir(temp.length);
+            if (0==temp.length){
+                $('#container').html("暂无数据");
+            }else{
+                var template ={
+                    title: {
+                        text: '趋势图',
+                        x: -20 //center
+                    },
+                    subtitle: {
+                        text: '',
+                        x: -20
+                    },
+                    xAxis: {
+                        labels: {
+                            step:5
+                        },
+                        categories: [${imgLabels}]
+                    },
+                    yAxis: {
+                        title: {
+                            text: '数量(次)'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }]
+                    },
+                    tooltip: {
+                        valueSuffix: '(次)'
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'right',
+                        verticalAlign: 'middle',
+                        borderWidth: 0
+                    },
+                    series:temp
+                };
+                $('#container').highcharts(template);
             }
         }
 
         $(document).ready(function(){
             //动态改变日期框
             $("input[name='statsWay']").click(function(){
-                var endDatePicker = datePicker(0);//结束时间
-                var beginDatePicker = datePicker(parseInt($(this).val()));;//开始时间
+                var endDatePicker = datePicker(-1);//结束时间
+                var beginDatePicker = datePicker(parseInt($(this).val()));//开始时间
                 $("#endDate").val(endDatePicker);//查询结束时间插件赋值
                 $("#beginDate").val(beginDatePicker);//查询开始时间插件赋值
             });
+            buildContainer(0);
         });
     </script>
 </head>
@@ -102,6 +159,12 @@
     </div>
 </div>
 
+<ul class="nav nav-tabs">
+    <li class="statsTab active"><a href="javascript:void(null);">菜单点击次数</a></li>
+    <li class="statsTab"><a href="javascript:void(null);">菜单点击人数</a></li>
+    <li class="statsTab"><a href="javascript:void(null);">人均点击次数</a></li>
+</ul>
+
 <!-- 查询条件表单 -->
 <div class="container-fluid">
     <div class="row-fluid">
@@ -130,10 +193,10 @@
 </div>
 
 <!-- 图表插件 -->
-<%--<div id="container" style="min-width: 310px; height: 400px;"></div>--%>
+<div id="container" style="min-width: 310px; height: 400px;text-align: center;"></div>
 
 <!-- 详细数据 -->
-<%--<div style="margin: 30px 0px 15px 20px; font-size: 14px; height: 14px; position: relative; z-index: 7; line-height: 14px; border-left: 4px solid #6B6B6B; padding-left: 3px;">详细数据</div>
+<div style="margin: 30px 0px 15px 20px; font-size: 14px; height: 14px; position: relative; z-index: 7; line-height: 14px; border-left: 4px solid #6B6B6B; padding-left: 3px;">详细数据</div>
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
@@ -141,27 +204,27 @@
                 <!-- table-striped  -->
                 <thead>
                 <tr>
-                    <th style="width: 20%;">时间</th>
-                    <th style="width: 20%;text-align: center;">新增关注数</th>
-                    <th style="width: 20%;text-align: center;">新取消关注数</th>
-                    <th style="width: 20%;text-align: center;">净增关注数</th>
-                    <th style="width: 20%;text-align: center;">累积关注数</th>
+                    <th style="width: 20%;text-align: center;">菜单</th>
+                    <th style="width: 20%;text-align: center;">子菜单</th>
+                    <th style="width: 20%;text-align: center;">菜单点击次数</th>
+                    <th style="width: 20%;text-align: center;">菜单点击人数</th>
+                    <th style="width: 20%;text-align: center;">人均点击次数</th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach items="${list}" var="map">
                     <tr>
-                        <td style="width: 30%;">${map.DATEINFO}</td>
-                        <td style="width: 15%;text-align: center;">${ map.DAYADDNUM == null ? 0 : map.DAYADDNUM }</td>
-                        <td style="width: 15%;text-align: center;">${ map.DAYCANCELNUM  == null ? 0 : map.DAYCANCELNUM}</td>
-                        <td style="width: 15%;text-align: center;">${ map.DAYLEAVENUM == null? 0 : map.DAYLEAVENUM}</td>
-                        <td style="width: 15%;text-align: center;">${ map.ALLNUM  == null ? 0 : map.ALLNUM}</td>
+                        <td style="width: 20%;text-align: center;">${map.PNAME}</td>
+                        <td style="width: 20%;text-align: center;">${map.NAME}</td>
+                        <td style="width: 20%;text-align: center;">${map.CHICK_COUNT}</td>
+                        <td style="width: 20%;text-align: center;">${map.USER_COUNT}</td>
+                        <td style="width: 20%;text-align: center;">${map.AVG_CHICK_COUNT}</td>
                     </tr>
                 </c:forEach>
                 </tbody>
             </table>
         </div>
     </div>
-</div>--%>
+</div>
 </body>
 </html>

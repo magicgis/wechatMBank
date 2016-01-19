@@ -23,14 +23,6 @@ import java.util.*;
 public class WeixinMessageStatsService extends CrudService<WeixinMessageDao, WeixinMessage> {
 
 	/**
-	 * 消息分析SQL模板
-	 */
-	private static final String MSG_REPORT_TEMPLATE = "SELECT t.cdate, t.msg_count, t.user_count," +
-			" round(to_number(1.0*t.msg_count/t.user_count), 2) avg_msg_count FROM ( SELECT cdate, COUNT(*) msg_count," +
-			" COUNT(DISTINCT from_user) user_count FROM ( SELECT to_char(create_date, '%1$s') cdate, from_user" +
-			" FROM YT_WEIXIN_MESSAGE %2$s) GROUP BY cdate) t ORDER BY t.cdate";
-	
-	/**
 	 * 用于组成SQL的协助枚举类
 	 * @author lc3@yitong.com.cn
 	 *
