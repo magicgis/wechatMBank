@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -108,6 +107,43 @@ public class WeixinMenuStatsService extends CrudService<WeixinMenuDao, WeixinMen
         return containerMap;
     }
 
+    public List<Map<String, Object>> getDetaileList(List<Map<String, Object>> list) {
+        if (null == list) {
+            return null;
+        }
+        StringBuilder pID = new StringBuilder();
+        List<Map<String, Object>> detaileList = new ArrayList<Map<String, Object>>();
+        // 整合重复数据
+        for (int i = 0; i<list.size(); i++) {
+            Map<String,Object> map = new HashMap<String, Object>();
+            if (pID.indexOf((String)list.get(i).get("PID"))<0){
+                pID.append(list.get(i).get("PID")).append(',');
+                map.put("PNAME",list.get(i).get("PNAME"));
+                List<Map<String, Object>> menuList = new ArrayList<Map<String, Object>>();
+                Map<String,Object> temp = new HashMap<String, Object>();
+                temp.put("NAME",list.get(i).get("NAME"));
+                temp.put("CHICK_COUNT",list.get(i).get("CHICK_COUNT"));
+                temp.put("USER_COUNT",list.get(i).get("USER_COUNT"));
+                temp.put("AVG_CHICK_COUNT",list.get(i).get("AVG_CHICK_COUNT"));
+                menuList.add(temp);
+                for (int j = i + 1; j < list.size(); j++) {
+                    if (pID.indexOf((String)list.get(j).get("PID"))>=0){
+                        Map<String,Object> temp1 = new HashMap<String, Object>();
+                        temp1.put("NAME",list.get(j).get("NAME"));
+                        temp1.put("CHICK_COUNT",list.get(j).get("CHICK_COUNT"));
+                        temp1.put("USER_COUNT",list.get(j).get("USER_COUNT"));
+                        temp1.put("AVG_CHICK_COUNT",list.get(j).get("AVG_CHICK_COUNT"));
+                        menuList.add(temp);
+                    }
+                }
+                map.put("NUM",menuList.size());
+                map.put("LIST",menuList);
+                detaileList.add(map);
+            }
+        }
+        return detaileList;
+    }
+
     private Map<String, Object> buildParmas (WeixinMenuStatsModel model){
         Map<String, Object> params = new HashMap<String, Object>();
         // 转化成Long型查询
@@ -160,75 +196,4 @@ public class WeixinMenuStatsService extends CrudService<WeixinMenuDao, WeixinMen
         return formatDate;
     }
 
-    private List<Map<String, Object>> formatList(Date startDate, Date endDate,List<Map<String, Object>> list) {
-        if (null == list) {
-            return null;
-        }
-
-        list = new LinkedList<Map<String, Object>>(list);
-        ListIterator<Map<String, Object>> listIte = list.listIterator();
-
-        // 获得开始和结束时间范围
-        Calendar startCal = Calendar.getInstance();
-        if (null != startDate) {
-            startCal.setTime(startDate);
-            if (null == endDate) {
-                endDate = new Date();
-            }
-        } else {
-            endDate = getCreateDate(list.get(list.size() - 1));
-            startCal.setTime(getCreateDate(list.get(0)));
-        }
-
-        // 格式化时间显示和补充缺少的时间
-        Calendar indexCal = Calendar.getInstance();
-        indexCal.setTime(startCal.getTime());
-        boolean hasMore = listIte.hasNext();
-        while (indexCal.getTime().before(endDate) || hasMore) {
-            Map<String, Object> e = null;
-            Date cdate = null;
-            if (hasMore) {
-                e = listIte.next();
-                cdate = getCreateDate(e);
-            }
-            if (null == e || cdate.after(indexCal.getTime())) {
-                if (hasMore) {
-                    listIte.previous();
-                }
-                e = new HashMap<String, Object>();
-                cdate = indexCal.getTime();
-                listIte.add(e);
-            }
-
-            e.put(DATE, sdf.format(cdate));
-            System.out.println(indexCal.getTime());
-            indexCal.add(Calendar.DAY_OF_MONTH, 1);
-            if (!listIte.hasNext()) {
-                hasMore = false;
-            }
-        }
-
-        return list;
-    }
-
-    /**
-     * 获取结果集的创建时间
-     *
-     * @param map
-     * @return
-     */
-    private Date getCreateDate(Map<String, Object> map) {
-        if (null == map) {
-            return null;
-        }
-        Object cdateStr = map.get(DATE);
-        if (null == cdateStr) {
-            return null;
-        }
-        try {
-            return sdf.parse(cdateStr.toString());
-        } catch (ParseException e) {
-            return null;
-        }
-    }
 }

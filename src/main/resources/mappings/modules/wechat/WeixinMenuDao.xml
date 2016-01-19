@@ -168,7 +168,7 @@
   		]]>
 			<include refid="menuChickStatsSql"/>
 		<![CDATA[
-  			) a,weixin_menu t where t.id = a.pid GROUP BY a.id,a.name,a.pid,t.name
+  			) a,weixin_menu t where t.id = a.pid GROUP BY a.id,a.name,a.pid,t.name ORDER BY chick_count desc
   		]]>
 	</select>
 

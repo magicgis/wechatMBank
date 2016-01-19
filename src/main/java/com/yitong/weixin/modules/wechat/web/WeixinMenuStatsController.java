@@ -37,31 +37,10 @@ public class WeixinMenuStatsController extends BaseController {
         List<Map<String, Object>> containerData = menuStatsService.getChickConutByDay(msModel);
         //详情数据
         List<Map<String, Object>> detailedData = menuStatsService.getChickConutStats(msModel);
-
+        //格式化图表数据
         Map<String, Object> containerMap =  menuStatsService.getContainerMap(msModel,containerData,detailedData);
-
-        /* 绘图数据 */
-//        StringBuilder labelSb = new StringBuilder();
-//        StringBuilder userAddNumSb = new StringBuilder();
-//        StringBuilder userCancelNumSb = new StringBuilder();
-//        StringBuilder userLeaveNumSb = new StringBuilder();
-//        StringBuilder userAllCountSb = new StringBuilder();
-//        for(Iterator<Map<String, Object>> i = containerData.iterator(); i.hasNext();) {
-//            Map<String, Object> m = i.next();
-//            labelSb.append('\'').append(StringUtils.toString(m.get("DATEINFO"), "")).append('\'');
-//            userAddNumSb.append(StringUtils.toString(m.get("DAYADDNUM"), "0"));
-//            userCancelNumSb.append(StringUtils.toString(m.get("DAYCANCELNUM"), "0"));
-//            userLeaveNumSb.append(StringUtils.toString(m.get("DAYLEAVENUM"), "0"));
-//            userAllCountSb.append(StringUtils.toString(m.get("ALLNUM"), "0"));
-//            if(i.hasNext()) {
-//                labelSb.append(',');
-//                userAddNumSb.append(',');
-//                userCancelNumSb.append(',');
-//                userLeaveNumSb.append(',');
-//                userAllCountSb.append(',');
-//            }
-//        }
-
+        //格式化详情数据
+//        List<Map<String, Object>> detaileList =menuStatsService.getDetaileList(detailedData);
         model.addAttribute("msModel", msModel);
         model.addAttribute("imgLabels", containerMap.get("labelSb"));
         model.addAttribute("chickCountList", containerMap.get("chickCountList"));
