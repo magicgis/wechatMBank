@@ -53,6 +53,7 @@
 
         //绘制图表
         function buildContainer(n){
+            var unit = n==0?'(次)':n==1?'(人)':'(次/人)';
             var temp = n==0?${chickCountList}:n==1?${userCountList}:${avgChickCountList};
             if (0==temp.length){
                 $('#container').html("暂无数据");
@@ -74,7 +75,7 @@
                     },
                     yAxis: {
                         title: {
-                            text: '数量(次)'
+                            text: '数量'+unit
                         },
                         plotLines: [{
                             value: 0,
@@ -83,7 +84,7 @@
                         }]
                     },
                     tooltip: {
-                        valueSuffix: '(次)'
+                        valueSuffix: unit
                     },
                     legend: {
                         layout: 'vertical',
