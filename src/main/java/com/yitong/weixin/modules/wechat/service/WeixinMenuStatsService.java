@@ -25,7 +25,10 @@ public class WeixinMenuStatsService extends CrudService<WeixinMenuDao, WeixinMen
     private final String DATE = "CDATE";// 日期
     private final String ID = "ID";
     private final String NAME = "NAME";
-    private int inFrontNum = 2;//图表显示点击次数前inFrontNum的菜单
+    private final String CHICK_COUNT = "CHICK_COUNT";
+    private final String USER_COUNT = "USER_COUNT";
+    private final String AVG_CHICK_COUNT = "AVG_CHICK_COUNT";
+    private int inFrontNum = 3;//图表显示点击次数前inFrontNum的菜单
 
     @Transactional(readOnly = true)
     public List<Map<String, Object>> getChickConutYesterday(WeixinMenuStatsModel model) {
@@ -38,7 +41,6 @@ public class WeixinMenuStatsService extends CrudService<WeixinMenuDao, WeixinMen
     public List<Map<String, Object>> getChickConutByDay(WeixinMenuStatsModel model) {
         Map<String, Object> params = buildParmas(model);
         List<Map<String, Object>> list = dao.menuChickStatsByDay(params);
-//        List<Map<String, Object>> formatList = formatList(model.getBeginDate(), model.getEndDate(),list);
         return list;
     }
 
@@ -72,9 +74,9 @@ public class WeixinMenuStatsService extends CrudService<WeixinMenuDao, WeixinMen
 
                     if (menu.get(ID).equals(data.get(ID)) && date.get(DATE).equals(data.get(DATE))){
                         flag = false;
-                        chickCount.append(StringUtils.toString(data.get("CHICK_COUNT"), "0"));
-                        userCount.append(StringUtils.toString(data.get("USER_COUNT"), "0"));
-                        avgChickCount.append(StringUtils.toString(data.get("AVG_CHICK_COUNT"), "0"));
+                        chickCount.append(StringUtils.toString(data.get(CHICK_COUNT), "0"));
+                        userCount.append(StringUtils.toString(data.get(USER_COUNT), "0"));
+                        avgChickCount.append(StringUtils.toString(data.get(AVG_CHICK_COUNT), "0"));
                     }
                 }
                 if (flag){
@@ -119,26 +121,22 @@ public class WeixinMenuStatsService extends CrudService<WeixinMenuDao, WeixinMen
             if (pID.indexOf((String)list.get(i).get("PID"))<0){
                 pID.append(list.get(i).get("PID")).append(',');
                 map.put("PNAME",list.get(i).get("PNAME"));
-//                List<Map<String, Object>> menuList = new ArrayList<Map<String, Object>>();
-//                Map<String,Object> temp = new HashMap<String, Object>();
-                map.put("NAME",list.get(i).get("NAME"));
-                map.put("CHICK_COUNT",list.get(i).get("CHICK_COUNT"));
-                map.put("USER_COUNT",list.get(i).get("USER_COUNT"));
-                map.put("AVG_CHICK_COUNT",list.get(i).get("AVG_CHICK_COUNT"));
+                map.put(NAME,list.get(i).get(NAME));
+                map.put(CHICK_COUNT,list.get(i).get(CHICK_COUNT));
+                map.put(USER_COUNT,list.get(i).get(USER_COUNT));
+                map.put(AVG_CHICK_COUNT,list.get(i).get(AVG_CHICK_COUNT));
                 detaileList.add(map);
                 for (int j = i + 1; j < list.size(); j++) {
                     if (pID.indexOf((String)list.get(j).get("PID"))>=0){
                         Map<String,Object> temp = new HashMap<String, Object>();
-                        temp.put("NAME",list.get(j).get("NAME"));
-                        temp.put("CHICK_COUNT",list.get(j).get("CHICK_COUNT"));
-                        temp.put("USER_COUNT",list.get(j).get("USER_COUNT"));
-                        temp.put("AVG_CHICK_COUNT",list.get(j).get("AVG_CHICK_COUNT"));
+                        temp.put(NAME,list.get(j).get(NAME));
+                        temp.put(CHICK_COUNT,list.get(j).get(CHICK_COUNT));
+                        temp.put(USER_COUNT,list.get(j).get(USER_COUNT));
+                        temp.put(AVG_CHICK_COUNT,list.get(j).get(AVG_CHICK_COUNT));
                         detaileList.add(temp);
                     }
                 }
                 map.put("NUM",detaileList.size());
-//                map.put("LIST",menuList);
-//                detaileList.add(map);
             }
         }
         return detaileList;
@@ -168,7 +166,7 @@ public class WeixinMenuStatsService extends CrudService<WeixinMenuDao, WeixinMen
             Map<String, Object> m = list.get(i);
             int count = 0;
             for (int j = i + 1; j < list.size(); j++) {
-                if (((BigDecimal)m.get("CHICK_COUNT")).compareTo((BigDecimal)list.get(j).get("CHICK_COUNT"))<=0){
+                if (((BigDecimal)m.get(CHICK_COUNT)).compareTo((BigDecimal)list.get(j).get(CHICK_COUNT))<=0){
                     count++;
                 }
             }
