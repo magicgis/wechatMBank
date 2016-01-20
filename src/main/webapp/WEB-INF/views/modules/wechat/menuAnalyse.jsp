@@ -54,7 +54,6 @@
         //绘制图表
         function buildContainer(n){
             var temp = n==0?${chickCountList}:n==1?${userCountList}:${avgChickCountList};
-            console.dir(temp.length);
             if (0==temp.length){
                 $('#container').html("暂无数据");
             }else{
