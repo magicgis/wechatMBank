@@ -214,7 +214,9 @@
                 <tbody>
                 <c:forEach items="${list}" var="map">
                     <tr>
-                        <td style="width: 20%;text-align: center;" rowspan="1">${map.PNAME}</td>
+                        <c:if test="${map.PNAME!=null && map.PNAME!=''}">
+                            <td style="width: 20%;text-align: center;" rowspan="${map.NUM}">${map.PNAME}</td>
+                        </c:if>
                         <td style="width: 20%;text-align: center;">${map.NAME}</td>
                         <td style="width: 20%;text-align: center;">${map.CHICK_COUNT}</td>
                         <td style="width: 20%;text-align: center;">${map.USER_COUNT}</td>

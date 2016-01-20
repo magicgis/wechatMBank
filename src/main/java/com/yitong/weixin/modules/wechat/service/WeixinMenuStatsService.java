@@ -119,26 +119,26 @@ public class WeixinMenuStatsService extends CrudService<WeixinMenuDao, WeixinMen
             if (pID.indexOf((String)list.get(i).get("PID"))<0){
                 pID.append(list.get(i).get("PID")).append(',');
                 map.put("PNAME",list.get(i).get("PNAME"));
-                List<Map<String, Object>> menuList = new ArrayList<Map<String, Object>>();
-                Map<String,Object> temp = new HashMap<String, Object>();
-                temp.put("NAME",list.get(i).get("NAME"));
-                temp.put("CHICK_COUNT",list.get(i).get("CHICK_COUNT"));
-                temp.put("USER_COUNT",list.get(i).get("USER_COUNT"));
-                temp.put("AVG_CHICK_COUNT",list.get(i).get("AVG_CHICK_COUNT"));
-                menuList.add(temp);
+//                List<Map<String, Object>> menuList = new ArrayList<Map<String, Object>>();
+//                Map<String,Object> temp = new HashMap<String, Object>();
+                map.put("NAME",list.get(i).get("NAME"));
+                map.put("CHICK_COUNT",list.get(i).get("CHICK_COUNT"));
+                map.put("USER_COUNT",list.get(i).get("USER_COUNT"));
+                map.put("AVG_CHICK_COUNT",list.get(i).get("AVG_CHICK_COUNT"));
+                detaileList.add(map);
                 for (int j = i + 1; j < list.size(); j++) {
                     if (pID.indexOf((String)list.get(j).get("PID"))>=0){
-                        Map<String,Object> temp1 = new HashMap<String, Object>();
-                        temp1.put("NAME",list.get(j).get("NAME"));
-                        temp1.put("CHICK_COUNT",list.get(j).get("CHICK_COUNT"));
-                        temp1.put("USER_COUNT",list.get(j).get("USER_COUNT"));
-                        temp1.put("AVG_CHICK_COUNT",list.get(j).get("AVG_CHICK_COUNT"));
-                        menuList.add(temp);
+                        Map<String,Object> temp = new HashMap<String, Object>();
+                        temp.put("NAME",list.get(j).get("NAME"));
+                        temp.put("CHICK_COUNT",list.get(j).get("CHICK_COUNT"));
+                        temp.put("USER_COUNT",list.get(j).get("USER_COUNT"));
+                        temp.put("AVG_CHICK_COUNT",list.get(j).get("AVG_CHICK_COUNT"));
+                        detaileList.add(temp);
                     }
                 }
-                map.put("NUM",menuList.size());
-                map.put("LIST",menuList);
-                detaileList.add(map);
+                map.put("NUM",detaileList.size());
+//                map.put("LIST",menuList);
+//                detaileList.add(map);
             }
         }
         return detaileList;
