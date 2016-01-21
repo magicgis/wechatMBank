@@ -80,6 +80,9 @@
 			changeTimeArea(parseInt($(this).val()));
 		});
         $('#container').highcharts({
+			credits:{
+				enabled:false // 禁用版权信息
+			},
             title: {
                 text: '趋势图',
                 x: -20 //center

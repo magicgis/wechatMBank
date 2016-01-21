@@ -59,6 +59,9 @@
                 $('#container').html("暂无数据");
             }else{
                 var template ={
+                    credits:{
+                        enabled:false // 禁用版权信息
+                    },
                     title: {
                         text: '趋势图',
                         x: -20 //center
