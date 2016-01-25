@@ -14,5 +14,7 @@ import com.yitong.weixin.modules.wechat.entity.WeixinMessageTemplate;
  */
 @MyBatisDao
 public interface WeixinMessageTemplateDao extends CrudDao<WeixinMessageTemplate> {
+
+	public void deleteAll();
 	
 }

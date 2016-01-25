@@ -23,8 +23,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.yitong.weixin.common.config.Global;
 import com.yitong.weixin.common.persistence.Page;
-import com.yitong.weixin.common.web.BaseController;
 import com.yitong.weixin.common.utils.StringUtils;
+import com.yitong.weixin.common.web.BaseController;
 import com.yitong.weixin.modules.wechat.entity.WeixinMessageTemplate;
 import com.yitong.weixin.modules.wechat.service.WeixinMessageTemplateService;
 import com.yitong.weixin.modules.wechat.utils.AcctUtils;
@@ -123,9 +123,9 @@ public class WeixinMessageTemplateController extends BaseController {
 	public void getList(String result) throws Exception{
 		JSONObject jResult = JSON.parseObject(result);
 		JSONArray templateList = jResult.getJSONArray("template_list");
-		String[] list = templateList.toArray(new String[templateList.size()]);
-		for(int i = 0; i < list.length; i++){
-			JSONObject template = JSONObject.parseObject(list[i]);
+		weixinMessageTemplateService.deleteAll();
+		for(int i = 0; i < templateList.size(); i++){
+			JSONObject template = templateList.getJSONObject(i);
 			saveMessageTemplate(template);
 		}
 	}
@@ -138,11 +138,12 @@ public class WeixinMessageTemplateController extends BaseController {
 		weixinMessageTemplate.setDeputyIndustry(template.getString("deputy_industry"));
 		weixinMessageTemplate.setContent(template.getString("content"));
 		weixinMessageTemplate.setExample(template.getString("example"));
+		weixinMessageTemplate.setAcctOpenId(AcctUtils.getOpenId());
 		weixinMessageTemplateService.save(weixinMessageTemplate);
 	}
 	
 	private String syncDeleteWeixinTemplate(WeixinMessageTemplate weixinMessageTemplate) throws Exception{
-		String url=String.format("https://api,weixin.qq.com/cgi-bin/template/del_private_template?access_token=%s",WeixinUtils.getAccessToken());
+		String url=String.format("https://api.weixin.qq.com/cgi-bin/template/del_private_template?access_token=%s",WeixinUtils.getAccessToken());
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("template_id", weixinMessageTemplate.getTemplateId());
 		String content = JSON.toJSONString(map);

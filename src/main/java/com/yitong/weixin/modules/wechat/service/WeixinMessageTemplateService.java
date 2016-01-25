@@ -43,5 +43,9 @@ public class WeixinMessageTemplateService extends CrudService<WeixinMessageTempl
 	public void delete(WeixinMessageTemplate weixinMessageTemplate) {
 		super.delete(weixinMessageTemplate);
 	}
+
+	public void deleteAll() {
+		dao.deleteAll();
+	}
 	
 }
