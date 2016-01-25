@@ -105,4 +105,8 @@
 		WHERE id = #{id}
 	</update>
 	
+	<update id="deleteAll">
+		DELETE FROM weixin_message_template
+	</update>
+	
 </mapper>
