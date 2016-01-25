@@ -12,15 +12,14 @@ import com.yitong.weixin.common.persistence.DataEntity;
 /**
  * access_token配置Entity
  * @author hf
- * @version 2016-01-22
+ * @version 2016-01-15
  */
 public class WeixinAccessToken extends DataEntity<WeixinAccessToken> {
 	
 	private static final long serialVersionUID = 1L;
-	private String acctOpenId;		// acct_open_id
+	private String acctOpenId;		// 微信号
 	private String accessToken;		// access_token
-	private String expriresIn;		// exprires_in
-	private Date lastDate;		// last_date
+	private Date expiresIn;		// 过期时间
 	
 	public WeixinAccessToken() {
 		super();
@@ -30,7 +29,7 @@ public class WeixinAccessToken extends DataEntity<WeixinAccessToken> {
 		super(id);
 	}
 
-	@Length(min=0, max=64, message="acct_open_id长度必须介于 0 和 64 之间")
+	@Length(min=0, max=64, message="微信号长度必须介于 0 和 64 之间")
 	public String getAcctOpenId() {
 		return acctOpenId;
 	}
@@ -39,7 +38,7 @@ public class WeixinAccessToken extends DataEntity<WeixinAccessToken> {
 		this.acctOpenId = acctOpenId;
 	}
 	
-	@Length(min=0, max=512, message="access_token长度必须介于 0 和 512 之间")
+	@Length(min=0, max=64, message="access_token长度必须介于 0 和 64 之间")
 	public String getAccessToken() {
 		return accessToken;
 	}
@@ -48,22 +47,13 @@ public class WeixinAccessToken extends DataEntity<WeixinAccessToken> {
 		this.accessToken = accessToken;
 	}
 	
-	@Length(min=0, max=16, message="exprires_in长度必须介于 0 和 16 之间")
-	public String getExpriresIn() {
-		return expriresIn;
-	}
-
-	public void setExpriresIn(String expriresIn) {
-		this.expriresIn = expriresIn;
-	}
-	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	public Date getLastDate() {
-		return lastDate;
+	public Date getExpiresIn() {
+		return expiresIn;
 	}
 
-	public void setLastDate(Date lastDate) {
-		this.lastDate = lastDate;
+	public void setExpiresIn(Date expiresIn) {
+		this.expiresIn = expiresIn;
 	}
 	
 }

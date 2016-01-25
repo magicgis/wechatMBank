@@ -6,8 +6,7 @@
 		a.id AS "id",
 		a.acct_open_id AS "acctOpenId",
 		a.access_token AS "accessToken",
-		a.exprires_in AS "expriresIn",
-		a.last_date AS "lastDate"
+		a.expires_in AS "expiresIn"
 	</sql>
 	
 	<sql id="weixinAccessTokenJoins">
@@ -28,9 +27,6 @@
 		<include refid="weixinAccessTokenJoins"/>
 		<where>
 			
-			<if test="acctOpenId != null and acctOpenId != ''">
-				AND a.acct_open_id = #{acctOpenId}
-			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -63,14 +59,12 @@
 			id,
 			acct_open_id,
 			access_token,
-			exprires_in,
-			last_date
+			expires_in
 		) VALUES (
 			#{id},
 			#{acctOpenId},
 			#{accessToken},
-			#{expriresIn},
-			sysdate
+			#{expiresIn}
 		)
 	</insert>
 	
@@ -78,8 +72,7 @@
 		UPDATE weixin_access_token SET 	
 			acct_open_id = #{acctOpenId},
 			access_token = #{accessToken},
-			exprires_in = #{expriresIn},
-			last_date = sysdate
+			expires_in = #{expiresIn}
 		WHERE id = #{id}
 	</update>
 	
@@ -93,11 +86,6 @@
 			<include refid="weixinAccessTokenColumns"/>
 		FROM weixin_access_token a
 		WHERE a.acct_open_id = #{acctOpenId}
-	</select>
-	
-	<select id="getCurrentTime" resultType="String">
-		SELECT to_char(sysdate,'yyyy-mm-dd hh24:mi:ss')
-		FROM dual
 	</select>
 	
 </mapper>
