@@ -18,6 +18,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -34,6 +36,8 @@ import com.yitong.weixin.common.utils.DateUtils;
 import com.yitong.weixin.common.utils.SpringContextHolder;
 import com.yitong.weixin.modules.wechat.entity.WeixinAccessToken;
 import com.yitong.weixin.modules.wechat.service.WeixinAccessTokenService;
+
+import freemarker.template.SimpleDate;
 
 /**
  * @ClassName: WeixinUtils
@@ -245,7 +249,8 @@ class AccessToken {
     		weixinAccessToken = new WeixinAccessToken();
     	}
     	weixinAccessToken.setAccessToken(token);
-    	weixinAccessToken.setExpiresIn(cal.getTime());
+//    	weixinAccessToken.setExpiresIn(cal.getTime());
+//    	weixinAccessToken.setExpriresIn(expires_in);
     	weixinAccessToken.setAcctOpenId(AcctUtils.getOpenId());
     	weixinAccessTokenService.save(weixinAccessToken);
     }
@@ -255,8 +260,9 @@ class AccessToken {
     * @Description: 是否过期
     * @return
     * @return boolean
+     * @throws ParseException 
      */
-    public boolean isExpired()
+    public boolean isExpired() throws ParseException
     {
     	// 第一次使用，过期
     	WeixinAccessToken weixinAccessToken = weixinAccessTokenService.getAccessTokenByOpenId(AcctUtils.getOpenId());
@@ -264,11 +270,19 @@ class AccessToken {
     		return true;
     	}
     	// 现在时间在过期时间之后，认为过期
-    	Calendar cal=Calendar.getInstance();
-    	cal.setTime(weixinAccessToken.getExpiresIn());
-    	if(Calendar.getInstance().after(cal))
+    	String currentTime = weixinAccessTokenService.getCurrentTime();
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH24:mm:ss");
+    	Date time = sdf.parse(currentTime);
+    	long n = time.getTime() - weixinAccessToken.getLastDate().getTime();
+    	if(n > 0){
     		return true;
+    	}
     	return false;
+//    	Calendar cal=Calendar.getInstance();
+//    	cal.setTime(weixinAccessToken.getExpiresIn());
+//    	if(Calendar.getInstance().after(cal))
+//    		return true;
+//    	return false;
     }
     
     public String getToken()

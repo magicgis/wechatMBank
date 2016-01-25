@@ -44,8 +44,12 @@ public class WeixinAccessTokenService extends CrudService<WeixinAccessTokenDao, 
 		super.delete(weixinAccessToken);
 	}
 	
-	public WeixinAccessToken getAccessTokenByOpenId(String AcctOpenId) {
-		return dao.getAccessTokenByOpenId(AcctOpenId);
+	public WeixinAccessToken getAccessTokenByOpenId(String acctOpenId) {
+		return dao.getAccessTokenByOpenId(acctOpenId);
+	}
+	
+	public String getCurrentTime() {
+		return dao.getCurrentTime();
 	}
 	
 }

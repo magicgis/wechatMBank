@@ -14,6 +14,8 @@ import com.yitong.weixin.modules.wechat.entity.WeixinAccessToken;
  */
 @MyBatisDao
 public interface WeixinAccessTokenDao extends CrudDao<WeixinAccessToken> {
-	public WeixinAccessToken getAccessTokenByOpenId(String AcctOpenId);
+	public WeixinAccessToken getAccessTokenByOpenId(String acctOpenId);
+
+	public String getCurrentTime();
 	
 }
