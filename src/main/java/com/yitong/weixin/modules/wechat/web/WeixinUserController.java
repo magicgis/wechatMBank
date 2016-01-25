@@ -3,29 +3,10 @@
  */
 package com.yitong.weixin.modules.wechat.web;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.collections.map.HashedMap;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.yitong.weixin.common.config.Global;
 import com.yitong.weixin.common.persistence.Page;
@@ -35,7 +16,21 @@ import com.yitong.weixin.modules.wechat.entity.WeixinUser;
 import com.yitong.weixin.modules.wechat.model.UserInfo;
 import com.yitong.weixin.modules.wechat.model.WeixinUserBatUpdateModel;
 import com.yitong.weixin.modules.wechat.service.WeixinUserService;
+import com.yitong.weixin.modules.wechat.utils.AcctUtils;
 import com.yitong.weixin.modules.wechat.utils.WeixinUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 微信用户Controller
@@ -201,7 +196,7 @@ public class WeixinUserController extends BaseController {
 	/**
 	 * 向微信服务器批量更新用户分组
 	 * @param wxuBatUpdateModel
-	 * @param redirectAttributes
+	 * @param openIds
 	 * @return
 	 * @throws Exception 
 	 */
@@ -225,5 +220,36 @@ public class WeixinUserController extends BaseController {
 		}
 		logger.debug("批量修改的所有用户openId为------->"+list.toString());
 		return list;
+	}
+
+	/**
+	 * 获取机构JSON数据。
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequiresPermissions("weixinUser")
+	@ResponseBody
+	@RequestMapping(value = "treeData")
+	public List<Map<String, Object>> treeData(HttpServletRequest request, HttpServletResponse response) {
+		List<Map<String, Object>> mapList = Lists.newArrayList();
+		Map<String,Object> pMap = Maps.newHashMap();
+		pMap.put("id", AcctUtils.getAcct().getAcctOpenId());
+		pMap.put("pId", "0");
+		pMap.put("pIds", "0");
+		pMap.put("name", AcctUtils.getAcct().getAcctName());
+		pMap.put("isParent", true);
+		mapList.add(pMap);
+		List<WeixinUser> list = weixinUserService.findListByAcctOpenId();
+		for (int i=0; i<list.size(); i++){
+			WeixinUser e = list.get(i);
+			Map<String, Object> map = Maps.newHashMap();
+			map.put("id", e.getOpenId());
+			map.put("pId", e.getAcctOpenId());
+			map.put("pIds", e.getAcctOpenId());
+			map.put("name", e.getUserName());
+			mapList.add(map);
+		}
+		return mapList;
 	}
 }

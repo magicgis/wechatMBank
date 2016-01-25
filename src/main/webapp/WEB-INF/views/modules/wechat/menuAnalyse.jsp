@@ -175,6 +175,9 @@
             <form:form id="searchForm" action="${ctx}/menuStats/menuAnalyse" method="post"
                        class="breadcrumb form-search" modelAttribute="msModel">
                 <div class="controls">
+                    <label class="control-label">用户：</label>
+                        <sys:treeselect id="user" name="userId" value="${ msModel.userId }" labelName="userName" labelValue="${ msModel.userName }"
+                                        title="用户" url="/wechat/weixinUser/treeData" cssClass="" allowClear="true" notAllowSelectParent="true"/>
                     <label class="control-label">按时间统计&nbsp;&nbsp;</label>
                     <fmt:formatDate value="${ msModel.beginDate }" var="beginDate" pattern="yyyy-MM-dd" />
                     <form:input id="beginDate" path="beginDate" type="text" readonly="readonly"

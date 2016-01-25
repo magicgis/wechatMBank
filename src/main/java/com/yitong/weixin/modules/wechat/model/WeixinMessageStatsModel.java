@@ -33,6 +33,10 @@ public class WeixinMessageStatsModel {
 
 	private RptFieldEnum type = RptFieldEnum.DAY_OF_MONTH;
 
+	private String userId;
+
+	private String userName;
+
 	private Date startDate;
 
 	private Date endDate;
@@ -41,11 +45,15 @@ public class WeixinMessageStatsModel {
 
 	public WeixinMessageStatsModel() {
 		super();
+		this.userId = "";
+		this.userName = "";
 	}
 
 	public WeixinMessageStatsModel(RptFieldEnum type) {
 		super();
 		this.type = type;
+		this.userId = "";
+		this.userName = "";
 	}
 
 	public WeixinMessageStatsModel(RptFieldEnum type, Date startDate, Date endDate) {
@@ -53,6 +61,8 @@ public class WeixinMessageStatsModel {
 		this.type = type;
 		this.startDate = startDate;
 		this.endDate = endDate;
+		this.userId = "";
+		this.userName = "";
 	}
 
 	public RptFieldEnum getType() {
@@ -61,6 +71,22 @@ public class WeixinMessageStatsModel {
 
 	public void setType(RptFieldEnum type) {
 		this.type = type;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public Date getStartDate() {

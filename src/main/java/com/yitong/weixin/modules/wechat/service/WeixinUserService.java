@@ -3,18 +3,17 @@
  */
 package com.yitong.weixin.modules.wechat.service;
 
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.google.common.collect.Maps;
 import com.yitong.weixin.common.persistence.Page;
 import com.yitong.weixin.common.service.CrudService;
 import com.yitong.weixin.modules.wechat.dao.WeixinUserDao;
 import com.yitong.weixin.modules.wechat.entity.WeixinUser;
 import com.yitong.weixin.modules.wechat.utils.AcctUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 微信用户Service
@@ -31,6 +30,12 @@ public class WeixinUserService extends CrudService<WeixinUserDao, WeixinUser> {
 	
 	public List<WeixinUser> findList(WeixinUser weixinUser) {
 		return super.findList(weixinUser);
+	}
+
+	public List<WeixinUser> findListByAcctOpenId() {
+		Map<String,Object> map = Maps.newHashMap();
+		map.put("acctOpenId", AcctUtils.getOpenId());
+		return dao.findListByAcctOpenId(map);
 	}
 	
 	public Page<WeixinUser> findPage(Page<WeixinUser> page, WeixinUser weixinUser) {

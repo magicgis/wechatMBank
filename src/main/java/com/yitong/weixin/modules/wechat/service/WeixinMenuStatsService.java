@@ -153,6 +153,7 @@ public class WeixinMenuStatsService extends CrudService<WeixinMenuDao, WeixinMen
         params.put("beginDate",beginDate);
         params.put("endDate",endDate);
         params.put("acctOpenId", AcctUtils.getOpenId());
+        params.put("userId", model.getUserId());
         return params;
     }
 

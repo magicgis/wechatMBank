@@ -9,17 +9,26 @@ import java.util.Date;
  **/
 public class WeixinMenuStatsModel {
 
+    private String userId;
+
+    private String userName;
+
     private Date beginDate;
 
     private Date endDate;
 
     private Integer statsWay = -7;
 
-    public WeixinMenuStatsModel() {}
+    public WeixinMenuStatsModel() {
+        this.userId = "";
+        this.userName = "";
+    }
 
     public WeixinMenuStatsModel(Date beginDate, Date endDate) {
         this.beginDate = beginDate;
         this.endDate = endDate;
+        this.userId = "";
+        this.userName = "";
     }
 
     public static WeixinMenuStatsModel getDefaultMenuStatsModel() {
@@ -30,6 +39,22 @@ public class WeixinMenuStatsModel {
     public static WeixinMenuStatsModel getYesterdayMenuStatsModel() {
         Date date = DateUtils.getDateByDay(null);
         return new WeixinMenuStatsModel(DateUtils.addDays(date, -1), DateUtils.addDays(date, -1));
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public Date getBeginDate() {
