@@ -40,13 +40,13 @@ public class WeixinMenuStatsController extends BaseController {
         //格式化图表数据
         Map<String, Object> containerMap =  menuStatsService.getContainerMap(msModel,containerData,detailedData);
         //格式化详情数据
-//        List<Map<String, Object>> detaileList =menuStatsService.getDetaileList(detailedData);
+        List<Map<String, Object>> detaileList =menuStatsService.getDetaileList(detailedData);
         model.addAttribute("msModel", msModel);
         model.addAttribute("imgLabels", containerMap.get("labelSb"));
         model.addAttribute("chickCountList", containerMap.get("chickCountList"));
         model.addAttribute("userCountList", containerMap.get("userCountList"));
         model.addAttribute("avgChickCountList", containerMap.get("avgChickCountList"));
-        model.addAttribute("list", detailedData);
+        model.addAttribute("list", detaileList);
         return "modules/wechat/menuAnalyse";
     }
 
