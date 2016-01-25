@@ -53,55 +53,56 @@
 		
 		// 图表数据
 		 $('#container').highcharts({
-	            title: {
-	                text: '趋势图',
-	                x: -20 //center
-	            },
-	            subtitle: {
-	                text: '',
-	                x: -20
-	            },
-	            xAxis: {
-	            	labels: { 
-	                    step:5
-	          		},
-	                categories: [${imgLabels}]
-	            },
-	            yAxis: {
-	                title: {
-	                    text: '数量(人)'
-	                },
-	                plotLines: [{
-	                    value: 0,
-	                    width: 1,
-	                    color: '#808080'
-	                }]
-	            },
-	            tooltip: {
-	                valueSuffix: '(人)'
-	            },
-	            legend: {
-	                layout: 'vertical',
-	                align: 'right',
-	                verticalAlign: 'middle',
-	                borderWidth: 0
-	            },
-	            series: [{
-	                name: '新关注人数',
-	                data: [${imgNewUserCounts}]
-	            }, {
-	                name: '取消关注人数',
-	                data: [${imgCancelUserCounts}]
-	            }, {
-	                name: '净增关注数',
-	                data: [${imgLeaveUserCounts}]
-	            }, {
-	                name: '累计关注人数',
-	                data: [${imgAllUserCounts}]
-	            }]
-	        });
-		
-		
+			 credits:{
+				 enabled:false // 禁用版权信息
+			 },
+			 title: {
+			 	text: '趋势图',
+			 	x: -20 //center
+		 	},
+		 	subtitle: {
+			 	text: '',
+			 	x: -20
+		 	},
+		 	xAxis: {
+				labels: {
+				step:5
+				},
+				categories: [${imgLabels}]
+			},
+			yAxis: {
+				title: {
+					text: '数量(人)'
+				},
+				plotLines: [{
+					value: 0,
+					width: 1,
+					color: '#808080'
+				}]
+			},
+			tooltip: {
+				valueSuffix: '(人)'
+			},
+			legend: {
+				layout: 'vertical',
+				align: 'right',
+				verticalAlign: 'middle',
+				borderWidth: 0
+			},
+			series: [{
+				name: '新关注人数',
+				data: [${imgNewUserCounts}]
+			}, {
+				name: '取消关注人数',
+				data: [${imgCancelUserCounts}]
+			}, {
+				name: '净增关注数',
+				data: [${imgLeaveUserCounts}]
+			}, {
+				name: '累计关注人数',
+				data: [${imgAllUserCounts}]
+			}]
+		 });
 	});
 </script>
 </head>

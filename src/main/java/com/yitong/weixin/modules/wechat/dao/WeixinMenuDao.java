@@ -22,6 +22,10 @@ public interface WeixinMenuDao extends CrudDao<WeixinMenu> {
 
 	public List<WeixinMenu> getByPId_(Map<String,String> map);
 
+	public List<Map<String, Object>> menuChickStats(Map<String,Object> map);
+
+	public List<Map<String, Object>> menuChickStatsByDay(Map<String,Object> map);
+
 	public List<Map<String, Object>> menuChickStatsYesterday(Map<String,Object> map);
 	
 }

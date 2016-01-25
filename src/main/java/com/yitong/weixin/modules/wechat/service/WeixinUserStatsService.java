@@ -214,7 +214,7 @@ public class WeixinUserStatsService extends CrudService<WeixinUserDao, WeixinUse
 		try {
 			return sdf.parse(cdateStr.toString());
 		} catch (ParseException e) {
+			return null;
 		}
-		return null;
 	}
 }

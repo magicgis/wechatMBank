@@ -145,7 +145,7 @@
 	<sql id="menuChickStatsSql">
 		<![CDATA[
 			select t.id, t.name, t.pid, a.from_user, a.type,to_char(a.chick_time / (60 * 60 * 24) +
-			to_date('1970-01-01 08:00:00', 'YYYY-MM-DD HH:MI:SS'),'YYYY-MM-DD') as cdate
+			to_date('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD') as cdate
 			from weixin_menu t, weixin_menu_chick_stats a
 			where t.type = 0 and t.code = a.key
 		]]>
@@ -153,7 +153,7 @@
 		<![CDATA[
 			union all
 			select t.id, t.name, t.pid, a.from_user, a.type,to_char(a.chick_time / (60 * 60 * 24) +
-			to_date('1970-01-01 08:00:00', 'YYYY-MM-DD HH:MI:SS'),'YYYY-MM-DD') as cdate
+			to_date('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD') as cdate
 			from weixin_menu t, weixin_menu_chick_stats a
 			where t.type = 1 and t.url = a.key
 		]]>
@@ -168,19 +168,19 @@
   		]]>
 			<include refid="menuChickStatsSql"/>
 		<![CDATA[
-  			) a,weixin_menu t where t.id = a.pid GROUP BY a.id,a.name,a.pid,t.name
+  			) a,weixin_menu t where t.id = a.pid GROUP BY a.id,a.name,a.pid,t.name ORDER BY a.pid,a.id
   		]]>
 	</select>
 
 	<select id="menuChickStatsByDay" parameterType="java.util.Map" resultType="java.util.HashMap">
 		<![CDATA[
-			SELECT a.name,COUNT(*) chick_count,COUNT(DISTINCT from_user) user_count,
+			SELECT a.id,a.name,COUNT(*) chick_count,COUNT(DISTINCT from_user) user_count,
        		round(to_number(1.0 * COUNT(*) / COUNT(DISTINCT from_user)), 2) avg_chick_count,a.cdate
   			FROM (
   		]]>
 		<include refid="menuChickStatsSql"/>
 		<![CDATA[
-  			) a GROUP BY a.name,a.cdate
+  			) a GROUP BY a.id,a.name,a.cdate
   		]]>
 	</select>
 

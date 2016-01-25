@@ -33,8 +33,21 @@ public class WeixinMenuStatsController extends BaseController {
         WeixinMenuStatsModel yesterday = WeixinMenuStatsModel.getYesterdayMenuStatsModel();
         List<Map<String, Object>> yesterdayData = menuStatsService.getChickConutYesterday(yesterday);
         model.addAttribute("yesterdayData", yesterdayData.size()>0?yesterdayData.get(0):new HashMap<String,Object>());
-
+        //图表数据
+        List<Map<String, Object>> containerData = menuStatsService.getChickConutByDay(msModel);
+        //详情数据
+        List<Map<String, Object>> detailedData = menuStatsService.getChickConutStats(msModel);
+        //格式化图表数据
+        Map<String, Object> containerMap =  menuStatsService.getContainerMap(msModel,containerData,detailedData);
+        //格式化详情数据
+        List<Map<String, Object>> detaileList =menuStatsService.getDetaileList(detailedData);
         model.addAttribute("msModel", msModel);
+        model.addAttribute("imgLabels", containerMap.get("labelSb"));
+        model.addAttribute("chickCountList", containerMap.get("chickCountList"));
+        model.addAttribute("userCountList", containerMap.get("userCountList"));
+        model.addAttribute("avgChickCountList", containerMap.get("avgChickCountList"));
+        model.addAttribute("list", detaileList);
         return "modules/wechat/menuAnalyse";
     }
+
 }
