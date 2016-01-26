@@ -186,28 +186,35 @@
 	</update>
 
 	<select id="findMessageStatsList" parameterType="java.util.Map" resultType="java.util.HashMap">
-	<![CDATA[
 		SELECT t.cdate,t.msg_count,t.user_count,round(to_number(1.0 * t.msg_count / t.user_count), 2) avg_msg_count
   			FROM (SELECT cdate,COUNT(*) msg_count,COUNT(DISTINCT from_user) user_count
-          	FROM (SELECT to_char(create_date, #{formatDate}) cdate, from_user FROM WEIXIN_MESSAGE WHERE
-    ]]>
-	<if test="acctOpenId != null and acctOpenId != ''">
+          	FROM (SELECT to_char(create_date, #{formatDate}) cdate, from_user FROM WEIXIN_MESSAGE
+		<where>
+			<if test="acctOpenId != null and acctOpenId != ''">
+				<if test="userId != null and userId != ''">
+					<![CDATA[
+					((to_user = #{acctOpenId} and from_user = #{userId}) or (to_user = #{userId} and from_user = #{acctOpenId} )) and
+					]]>
+				</if>
+				<if test="userId == null or userId == ''">
+					<![CDATA[
+					(to_user = #{acctOpenId} or from_user = #{acctOpenId}) and
+					]]>
+				</if>
+			</if>
+			<if test="startDate != null and startDate != ''">
+				<![CDATA[
+    				create_date between #{startDate} and #{endDate}
+    			]]>
+			</if>
+			<if test="startDate == null or startDate == ''">
+				<![CDATA[
+					create_date is not null
+				]]>
+			</if>
+		</where>
 		<![CDATA[
-			(to_user = #{acctOpenId} or from_user = #{acctOpenId}) and
+			) GROUP BY cdate) t ORDER BY t.cdate
 		]]>
-	</if>
-	<if test="startDate != null and startDate != ''">
-		<![CDATA[
-    		create_date between #{startDate} and #{endDate}
-    	]]>
-	</if>
-	<if test="startDate == null or startDate == ''">
-		<![CDATA[
-			create_date is not null
-		]]>
-	</if>
-	<![CDATA[
-		) GROUP BY cdate) t ORDER BY t.cdate
-	]]>
 	</select>
 </mapper>

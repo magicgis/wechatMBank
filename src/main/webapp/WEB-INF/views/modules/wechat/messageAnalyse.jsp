@@ -178,9 +178,13 @@
 	<form:form id="searchForm" action="${ctx}/messageStats/messageAnalyse" method="post"
 		modelAttribute="rptModel" class="breadcrumb form-search">
 		<div class="controls">
+			<label class="control-label">用户：</label>
+			<sys:treeselect id="user" name="userId" value="${ rptModel.userId }" labelName="userName" labelValue="${ rptModel.userName }"
+							title="用户" url="/wechat/weixinUser/treeData" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 			<label class="control-label">分析类型：&nbsp;</label>
 			<form:select id="rpt_type" path="type" items="${rptModel.msgRptList}" itemLabel="label"
 			itemValue="name" onchange="selectChange()"/>
+			<br><br>
 			<label class="control-label">按时间统计：&nbsp;</label>
 			<fmt:formatDate value="${rptModel.startDate}" var="startDate" pattern="yyyy-MM-dd" />
 			<form:input id="startDate" path="startDate" value="${startDate}" type="text"
@@ -195,7 +199,7 @@
 			<form:radiobutton id="dateType7" path="dateType" value="-7" label="7天" />
 			<form:radiobutton id="dateType14" path="dateType" value="-14" label="14天" />
 			<form:radiobutton id="dateType30" path="dateType" value="-30" label="30天" />
-			</span> &nbsp;&nbsp; 
+			</span> &nbsp;&nbsp;
 			<input class="btn btn-primary" type="submit" value="查询" onclick="return checkAndSubmit()"/>
 		</div>
 	</form:form>

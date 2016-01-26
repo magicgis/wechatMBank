@@ -124,7 +124,12 @@
 		WHERE id = #{id}
 	</update>
 
-	<sql id="hickStatsWhereSql">
+	<sql id="chickStatsWhereSql">
+		<if test="userId != null and userId != ''">
+			<![CDATA[
+				and a.from_user = #{userId}
+			]]>
+		</if>
 		<if test="acctOpenId != null and acctOpenId != ''">
 			<![CDATA[
 				and a.to_user = #{acctOpenId}
@@ -149,7 +154,7 @@
 			from weixin_menu t, weixin_menu_chick_stats a
 			where t.type = 0 and t.code = a.key
 		]]>
-			<include refid="hickStatsWhereSql"/>
+			<include refid="chickStatsWhereSql"/>
 		<![CDATA[
 			union all
 			select t.id, t.name, t.pid, a.from_user, a.type,to_char(a.chick_time / (60 * 60 * 24) +
@@ -157,7 +162,7 @@
 			from weixin_menu t, weixin_menu_chick_stats a
 			where t.type = 1 and t.url = a.key
 		]]>
-			<include refid="hickStatsWhereSql"/>
+			<include refid="chickStatsWhereSql"/>
 	</sql>
 
 	<select id="menuChickStats" parameterType="java.util.Map" resultType="java.util.HashMap">

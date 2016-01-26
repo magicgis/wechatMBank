@@ -1,28 +1,19 @@
 package com.yitong.weixin.modules.wechat.service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
-
+import com.yitong.weixin.common.service.CrudService;
+import com.yitong.weixin.common.utils.DateUtils;
+import com.yitong.weixin.modules.wechat.dao.WeixinMessageDao;
+import com.yitong.weixin.modules.wechat.entity.WeixinMessage;
+import com.yitong.weixin.modules.wechat.model.WeixinMessageStatsModel;
+import com.yitong.weixin.modules.wechat.utils.AcctUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import com.yitong.weixin.common.service.CrudService;
-import com.yitong.weixin.common.utils.DateUtils;
-import com.yitong.weixin.modules.wechat.dao.WeixinMessageDao;
-import com.yitong.weixin.modules.wechat.entity.WeixinMessage;
-import com.yitong.weixin.modules.wechat.utils.AcctUtils;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 /**
@@ -178,12 +169,13 @@ public class WeixinMessageStatsService extends CrudService<WeixinMessageDao, Wei
 	}
 	/**
 	 * 消息分析接口
-	 * @param rptType
-	 * @param startDate
-	 * @param endDate
+	 * @param rptModel
 	 * @return
 	 */
-	public List<Map<String, Object>> genReportByCalType(RptFieldEnum rptType, Date startDate, Date endDate) {
+	public List<Map<String, Object>> genReportByCalType(WeixinMessageStatsModel rptModel) {
+		RptFieldEnum rptType = rptModel.getType();
+		Date endDate = rptModel.getEndDate();
+		Date startDate = rptModel.getStartDate();
 		Assert.notNull(rptType, "统计类型传值不正确");
 		Set<RptFieldEnum> fieldSet = EnumSet.noneOf(RptFieldEnum.class);
 		fieldSet.add(RptFieldEnum.YEAR);
@@ -213,6 +205,7 @@ public class WeixinMessageStatsService extends CrudService<WeixinMessageDao, Wei
 		params.put("endDate",DateUtils.addDays(endDate, 1));
 		params.put("formatDate",StringUtils.collectionToDelimitedString(fieldExpList, "-"));
 		params.put("acctOpenId", AcctUtils.getOpenId());
+		params.put("userId", rptModel.getUserId());
 		List<Map<String, Object>> list = dao.findMessageStatsList(params);
 		return rptType.formatList(startDate, endDate, list);
 	}

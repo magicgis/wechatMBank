@@ -32,13 +32,11 @@ public class WeixinMessageStatsController extends BaseController {
 		// 昨日关键指标
 		if(RptFieldEnum.DAY_OF_MONTH == rptModel.getType()) {
 			WeixinMessageStatsModel yesRptModel = WeixinMessageStatsModel.getYesterdayMessageStatsModel();
-			List<Map<String, Object>> yesterdayList = weixinMessageStatsService.genReportByCalType(yesRptModel.getType(),
-					yesRptModel.getStartDate(), yesRptModel.getEndDate());
+			List<Map<String, Object>> yesterdayList = weixinMessageStatsService.genReportByCalType(yesRptModel);
 			model.addAttribute("yesterday", yesterdayList.size()>0?yesterdayList.get(0):new HashMap<String,Object>());
 		}
 		
-		List<Map<String, Object>> list = weixinMessageStatsService.genReportByCalType(rptModel.getType(),
-				rptModel.getStartDate(), rptModel.getEndDate());
+		List<Map<String, Object>> list = weixinMessageStatsService.genReportByCalType(rptModel);
 		StringBuilder labelSb = new StringBuilder();
 		StringBuilder msgCountSb = new StringBuilder();
 		StringBuilder userCountSb = new StringBuilder();

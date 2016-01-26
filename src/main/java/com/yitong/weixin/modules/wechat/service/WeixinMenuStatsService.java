@@ -126,6 +126,7 @@ public class WeixinMenuStatsService extends CrudService<WeixinMenuDao, WeixinMen
                 map.put(USER_COUNT,list.get(i).get(USER_COUNT));
                 map.put(AVG_CHICK_COUNT,list.get(i).get(AVG_CHICK_COUNT));
                 detaileList.add(map);
+                int num = 1;
                 for (int j = i + 1; j < list.size(); j++) {
                     if (pID.indexOf((String)list.get(j).get("PID"))>=0){
                         Map<String,Object> temp = new HashMap<String, Object>();
@@ -134,9 +135,10 @@ public class WeixinMenuStatsService extends CrudService<WeixinMenuDao, WeixinMen
                         temp.put(USER_COUNT,list.get(j).get(USER_COUNT));
                         temp.put(AVG_CHICK_COUNT,list.get(j).get(AVG_CHICK_COUNT));
                         detaileList.add(temp);
+                        num++;
                     }
                 }
-                map.put("NUM",detaileList.size());
+                map.put("NUM",num);
             }
         }
         return detaileList;
@@ -153,25 +155,26 @@ public class WeixinMenuStatsService extends CrudService<WeixinMenuDao, WeixinMen
         params.put("beginDate",beginDate);
         params.put("endDate",endDate);
         params.put("acctOpenId", AcctUtils.getOpenId());
+        params.put("userId", model.getUserId());
         return params;
     }
 
     private List<Map<String, Object>> getMenuInFrontList(List<Map<String, Object>> list){
-        List<Map<String, Object>> menuInFront = new ArrayList<Map<String, Object>>(list);
-        if (menuInFront==null || menuInFront.size()<=inFrontNum){
-            return menuInFront;
+        if (list==null || list.size()<=inFrontNum){
+            return list;
         }
+        List<Map<String, Object>> menuInFront = new ArrayList<Map<String, Object>>();
         // 整合重复数据
-        for (int i = 0; menuInFront.size()>inFrontNum; i++) {
+        for (int i = 0; i < list.size(); i++) {
             Map<String, Object> m = list.get(i);
             int count = 0;
-            for (int j = i + 1; j < list.size(); j++) {
-                if (((BigDecimal)m.get(CHICK_COUNT)).compareTo((BigDecimal)list.get(j).get(CHICK_COUNT))<=0){
+            for (int j = 0; j < list.size(); j++) {
+                if (i!=j&&((BigDecimal)m.get(CHICK_COUNT)).compareTo((BigDecimal)list.get(j).get(CHICK_COUNT))<0){
                     count++;
                 }
             }
-            if (count>=inFrontNum){
-                menuInFront.remove(i);
+            if (count<inFrontNum && menuInFront.size()<inFrontNum ){
+                menuInFront.add(m);
             }
         }
         return menuInFront;
