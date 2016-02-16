@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yitong.weixin.front.info.dao.WeixinUserFDao">
+    
+	<sql id="weixinUserColumns">
+		a.id AS "id",
+		a.open_id AS "openId",
+		a.user_name AS "userName",
+		a.acct_open_id AS "acctOpenId",
+		a.group_id AS "group.id",
+		u8.group_name AS "group.groupName",
+		a.last_active_time AS "lastActiveTime",
+		a.sex AS "sex",
+		a.city AS "city",
+		a.country AS "country",
+		a.province AS "province",
+		a.head_img_url AS "headImgUrl",
+		a.subscribe_time AS "subscribeTime",
+		a.cancel_subscribe_time AS "cancelSubscribeTime",
+		a.bankcard_id1 AS "bankcardId1",
+		a.bankcard_id2 AS "bankcardId2",
+		a.bankcard_id3 AS "bankcardId3",
+		a.cust_id AS "custId",
+		a.union_id AS "unionId"
+	</sql>
+	
+	<sql id="weixinUserJoins">
+	    LEFT JOIN weixin_group u8 ON u8.id = a.group_id
+	</sql>
+    
+	<select id="get" resultType="WeixinUserF">
+		SELECT 
+			<include refid="weixinUserColumns"/>
+		FROM weixin_user a
+		<include refid="weixinUserJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findByOpenId" parameterType="java.util.Map" resultType="WeixinUserF">
+		SELECT 
+			<include refid="weixinUserColumns"/>
+		FROM weixin_user a
+		<include refid="weixinUserJoins"/>
+		WHERE a.open_id = #{openId}
+	</select>
+	
+	
+	<select id="findList" resultType="WeixinUserF">
+		SELECT 
+			<include refid="weixinUserColumns"/>
+		FROM weixin_user a
+		<include refid="weixinUserJoins"/>
+		<where>
+			
+			<if test="userName != null and userName != ''">
+				AND a.user_name LIKE '%'||#{userName}||'%'
+			</if>
+			<if test="group!=null and group.id!=null and group.id != ''">
+				AND a.group_id = #{group.id}
+			</if>
+			<if test="acctOpenId != null and acctOpenId != ''">
+				AND a.acct_open_id = #{acctOpenId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findListByAcctOpenId" parameterType="java.util.Map" resultType="WeixinUserF">
+		SELECT 
+			<include refid="weixinUserColumns"/>
+		FROM weixin_user a
+		<include refid="weixinUserJoins"/>
+		<where>
+			
+		    <if test="userName != null and userName != ''">
+				AND a.user_name LIKE '%'||#{userName}||'%'
+			</if>
+			<if test="groupId!=null and groupId != ''">
+				AND a.group_id = #{groupId}
+			</if>
+			<if test="acctOpenId != null and acctOpenId != ''">
+				AND a.acct_open_id = #{acctOpenId}
+			</if>
+		</where>
+		<choose>
+			<when test="pageOrderBy != null and pageOrderBy != ''">
+				ORDER BY ${pageOrderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WeixinUserF">
+		SELECT 
+			<include refid="weixinUserColumns"/>
+		FROM weixin_user a
+		<include refid="weixinUserJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO weixin_user(
+			id,
+			open_id,
+			user_name,
+			acct_open_id,
+			group_id,
+			last_active_time,
+			sex,
+			city,
+			country,
+			province,
+			head_img_url,
+			subscribe_time,
+			cancel_subscribe_time,
+			bankcard_id1,
+			bankcard_id2,
+			bankcard_id3,
+			cust_id,
+			union_id
+		) VALUES (
+			#{id},
+			#{openId},
+			#{userName},
+			#{acctOpenId},
+			#{group.id},
+			#{lastActiveTime},
+			#{sex},
+			#{city},
+			#{country},
+			#{province},
+			#{headImgUrl},
+			#{subscribeTime},
+			#{cancelSubscribeTime},
+			#{bankcardId1},
+			#{bankcardId2},
+			#{bankcardId3},
+			#{custId},
+			#{unionId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE weixin_user SET 	
+			open_id = #{openId},
+			user_name = #{userName},
+			acct_open_id = #{acctOpenId},
+			group_id = #{group.id},
+			last_active_time = #{lastActiveTime},
+			sex = #{sex},
+			city = #{city},
+			country = #{country},
+			province = #{province},
+			head_img_url = #{headImgUrl},
+			subscribe_time = #{subscribeTime},
+			cancel_subscribe_time = #{cancelSubscribeTime},
+			bankcard_id1 = #{bankcardId1},
+			bankcard_id2 = #{bankcardId2},
+			bankcard_id3 = #{bankcardId3},
+			cust_id = #{custId},
+			union_id = #{unionId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByUserIds" parameterType="java.util.Map">
+		UPDATE weixin_user SET 	
+			group_id = #{groupId}
+		WHERE id in 
+		  <foreach item="item" index="index" collection="userIds" 
+                         open="(" separator="," close=")">
+                        #{item}
+          </foreach>
+	</update>
+	
+	<update id="delete">
+		DELETE FROM weixin_user
+		WHERE id = #{id}
+	</update>
+
+	<select id="findUserListByDay" parameterType="java.util.Map" resultType="java.util.HashMap" >
+		<![CDATA[
+			select a.dateInfo,coalesce(b.user_count, 0) dayAddNum,coalesce(c.user_count, 0) dayCancelNum,
+			(coalesce(b.user_count, 0) - coalesce(c.user_count, 0)) dayLeaveNum
+			from (select * from (select to_number(a.subscribe_time) dateInfo from weixin_user a
+				where to_number(a.subscribe_time) >= #{beginDate} and to_number(a.subscribe_time) < #{endDate}
+        ]]>
+		<if test="acctOpenId != null and acctOpenId != ''">
+		<![CDATA[
+			and a.acct_open_id = #{acctOpenId}
+		]]>
+		</if>
+		<![CDATA[
+        	) m union select * from (select to_number(a.cancel_subscribe_time) dateInfo from weixin_user a
+			where to_number(a.cancel_subscribe_time) >= #{beginDate} and to_number(a.cancel_subscribe_time) < #{endDate}
+		]]>
+		<if test="acctOpenId != null and acctOpenId != ''">
+			<![CDATA[
+			and a.acct_open_id = #{acctOpenId}
+		]]>
+		</if>
+		<![CDATA[
+		   ) n) a join (select cdate, count(distinct open_id) user_count from (select to_number(a.subscribe_time) cdate, a.open_id
+		   from weixin_user a where to_number(a.subscribe_time) >= #{beginDate} and to_number(a.subscribe_time) < #{endDate}
+		]]>
+		<if test="acctOpenId != null and acctOpenId != ''">
+			<![CDATA[
+			and a.acct_open_id = #{acctOpenId}
+		]]>
+		</if>
+		<![CDATA[
+		   ) group by cdate) b on a.dateInfo = b.cdate left join (select cdate, count(distinct open_id) user_count
+		   from (select to_number(a.cancel_subscribe_time) cdate,a.open_id from weixin_user a
+		   where to_number(a.cancel_subscribe_time) >= #{beginDate} and to_number(a.cancel_subscribe_time) < #{endDate}
+		]]>
+		<if test="acctOpenId != null and acctOpenId != ''">
+			<![CDATA[
+			and a.acct_open_id = #{acctOpenId}
+		]]>
+		</if>
+		<![CDATA[
+		   ) group by cdate) c on a.dateInfo = c.cdate order by a.dateInfo
+		]]>
+	</select>
+
+	<select id="fingUserNumByTime" parameterType="java.util.Map" resultType="java.util.HashMap">
+		<![CDATA[
+		select count(open_id) allNum from weixin_user n where n.cancel_subscribe_time is null
+			and to_number(n.subscribe_time) <= #{beginTime}
+		]]>
+		<if test="acctOpenId != null and acctOpenId != ''">
+		<![CDATA[
+			and n.acct_open_id = #{acctOpenId}
+		]]>
+		</if>
+	</select>
+	
+	<update id="updateWeixinUserByOpenId1">
+		UPDATE weixin_user SET 	
+			user_name = #{userName},
+			sex = #{sex},
+			city = #{city},
+			country = #{country},
+			head_img_url = #{headImgUrl},
+			cancel_subscribe_time = #{cancelSubscribeTime}
+		WHERE open_id = #{openId}
+	</update>
+	
+	<update id="updateWeixinUserByOpenId2">
+		UPDATE weixin_user SET 	
+			user_name = #{userName},
+			sex = #{sex},
+			city = #{city},
+			country = #{country},
+			province = #{province},
+			head_img_url = #{headImgUrl},
+			group_id = #{groupId},
+			cancel_subscribe_time = #{cancelSubscribeTime}
+		WHERE open_id = #{openId}
+	</update>
+	
+	<update id="updateCustIdByOpenId">
+		UPDATE weixin_user SET 	
+			cust_id = #{custId}
+		WHERE open_id = #{openId}
+	</update>
+	
+	<update id="updateSubTimeByOpenId">
+		UPDATE weixin_user SET 	
+			cancel_subscribe_time = #{createTime}
+		WHERE open_id = #{openId}
+	</update>
+</mapper>
