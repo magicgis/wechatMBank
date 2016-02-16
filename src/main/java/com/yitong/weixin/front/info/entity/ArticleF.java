@@ -7,8 +7,8 @@ import java.util.Date;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion.User;
 import com.yitong.weixin.common.persistence.DataEntity;
+import com.yitong.weixin.modules.sys.entity.User;
 
 /**
  * 文章Entity
