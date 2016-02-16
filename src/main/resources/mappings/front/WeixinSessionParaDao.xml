@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yitong.weixin.front.info.dao.WeiXinSessionParaDao">
+    
+	<sql id="weixinSessionParaColumns">
+		a.id AS "id",
+		a.open_id AS "openId",
+		a.menu_no AS "menuNo",
+		a.key AS "key",
+		a.value AS "value",
+		a.type AS "type"
+	</sql>
+	
+	<sql id="weixinSessionParaJoins">
+	</sql>
+    
+	<select id="get" resultType="WeixinSessionPara">
+		SELECT 
+			<include refid="weixinSessionParaColumns"/>
+		FROM weixin_session_para a
+		<include refid="weixinSessionParaJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WeixinSessionPara">
+		SELECT 
+			<include refid="weixinSessionParaColumns"/>
+		FROM weixin_session_para a
+		<include refid="weixinSessionParaJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WeixinSessionPara">
+		SELECT 
+			<include refid="weixinSessionParaColumns"/>
+		FROM weixin_session_para a
+		<include refid="weixinSessionParaJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO weixin_session_para(
+			id,
+			open_id,
+			menu_no,
+			key,
+			value,
+			type
+		) VALUES (
+			#{id},
+			#{openId},
+			#{menuNo},
+			#{key},
+			#{value},
+			#{type}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE weixin_session_para SET 	
+			open_id = #{openId},
+			menu_no = #{menuNo},
+			key = #{key},
+			value = #{value},
+			type = #{type}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM weixin_session_para
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByOpenId">
+		DELETE FROM weixin_session_para a
+		WHERE a.open_id = #{openId}
+	</update>
+	
+	<select id="findByMenuNo" parameterType="java.util.Map"  resultType="WeixinSessionPara">
+		SELECT 
+			<include refid="weixinSessionParaColumns"/>
+		FROM weixin_session_para a
+		WHERE a.open_id = #{openId}
+		AND   a.menu_no = #{menuNo}
+	</select>
+	
+</mapper>

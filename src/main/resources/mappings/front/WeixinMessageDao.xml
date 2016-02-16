@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yitong.weixin.front.info.dao.WeixinMessageFDao">
+    
+	<sql id="weixinMessageColumns">
+		a.id AS "id",
+		a.to_user AS "toUser",
+		a.from_user AS "fromUser",
+		a.msg_type AS "msgType",
+		a.content AS "content",
+		a.url AS "url",
+		a.title AS "title",
+		a.description AS "description",
+		a.media_id AS "mediaId",
+		a.media_format AS "mediaFormat",
+		a.thumbmedia_id AS "thumbmediaId",
+		a.loc_x AS "locX",
+		a.loc_y AS "locY",
+		a.loc_scale AS "locScale",
+		a.loc_lable AS "locLable",
+		a.function_code AS "functionCode",
+		a.create_date AS "createDate",
+		u8.user_name AS "weixinUser.userName",
+		u8.open_id AS "weixinUser.openId"
+	</sql>
+	
+	<sql id="weixinMessageJoins">
+	    LEFT JOIN weixin_user u8 ON u8.open_id = a.from_user
+	</sql>
+    
+	<select id="get" resultType="WeixinMessageF">
+		SELECT 
+			<include refid="weixinMessageColumns"/>
+		FROM weixin_message a
+		<include refid="weixinMessageJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findListGroupBy" resultType="WeixinMessageF">
+	    SELECT 
+			<include refid="weixinMessageColumns"/>
+		FROM
+		(select a.* from weixin_message a,
+		       (select t.from_user, max(t.create_date) create_date
+		          from weixin_message t
+		         group by t.from_user) b
+		 where a.from_user = b.from_user
+		   and a.create_date = b.create_date
+		   AND a.create_date BETWEEN #{beginDate} AND #{endDate}
+		   and a.from_user in
+		       (select u.open_id from WEIXIN_USER u 
+			
+				<if test="weixinUser.userName != null and weixinUser.userName != ''">
+					where u.user_name like '%'||#{weixinUser.userName}||'%'
+				</if>
+				)
+			 <if test="content != null and content != ''">
+				and a.content like '%'||#{content}||'%'
+			</if>
+		   order by a.create_date desc)a
+		   <include refid="weixinMessageJoins"/>
+	</select>
+	
+	<select id="findPageByMsgId" resultType="WeixinMessageF">
+	    SELECT 
+			<include refid="weixinMessageColumns"/>
+		FROM weixin_message a
+		<include refid="weixinMessageJoins"/>
+		 where (a.from_user = #{fromUser} and
+		       a.to_user = #{toUser})
+		    or (a.from_user = #{toUser} and
+		       a.to_user = #{fromUser})
+		 order by a.create_date desc
+	</select>
+	
+	
+	<select id="findList" resultType="WeixinMessageF">
+		SELECT 
+			<include refid="weixinMessageColumns"/>
+		FROM weixin_message a
+		<include refid="weixinMessageJoins"/>
+		<where>
+			
+			<if test="toUser != null and toUser != ''">
+				AND a.to_user = #{toUser}
+			</if>
+			<if test="fromUser != null and fromUser != ''">
+				AND a.from_user = #{fromUser}
+			</if>
+			<if test="content != null and content != ''">
+				AND a.content = #{content}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WeixinMessageF">
+		SELECT 
+			<include refid="weixinMessageColumns"/>
+		FROM weixin_message a
+		<include refid="weixinMessageJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO weixin_message(
+			id,
+			to_user,
+			from_user,
+			msg_type,
+			content,
+			url,
+			title,
+			description,
+			media_id,
+			media_format,
+			thumbmedia_id,
+			loc_x,
+			loc_y,
+			loc_scale,
+			loc_lable,
+			function_code,
+			create_date
+		) VALUES (
+			#{id},
+			#{toUser},
+			#{fromUser},
+			#{msgType},
+			#{content},
+			#{url},
+			#{title},
+			#{description},
+			#{mediaId},
+			#{mediaFormat},
+			#{thumbmediaId},
+			#{locX},
+			#{locY},
+			#{locScale},
+			#{locLable},
+			#{functionCode},
+			#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE weixin_message SET 	
+			to_user = #{toUser},
+			from_user = #{fromUser},
+			msg_type = #{msgType},
+			content = #{content},
+			url = #{url},
+			title = #{title},
+			description = #{description},
+			media_id = #{mediaId},
+			media_format = #{mediaFormat},
+			thumbmedia_id = #{thumbmediaId},
+			loc_x = #{locX},
+			loc_y = #{locY},
+			loc_scale = #{locScale},
+			loc_lable = #{locLable},
+			function_code = #{functionCode}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM weixin_message
+		WHERE id = #{id}
+	</update>
+
+	<select id="findMessageStatsList" parameterType="java.util.Map" resultType="java.util.HashMap">
+	<![CDATA[
+		SELECT t.cdate,t.msg_count,t.user_count,round(to_number(1.0 * t.msg_count / t.user_count), 2) avg_msg_count
+  			FROM (SELECT cdate,COUNT(*) msg_count,COUNT(DISTINCT from_user) user_count
+          	FROM (SELECT to_char(create_date, #{formatDate}) cdate, from_user FROM WEIXIN_MESSAGE WHERE
+    ]]>
+	<if test="acctOpenId != null and acctOpenId != ''">
+		<![CDATA[
+			(to_user = #{acctOpenId} or from_user = #{acctOpenId}) and
+		]]>
+	</if>
+	<if test="startDate != null and startDate != ''">
+		<![CDATA[
+    		create_date between #{startDate} and #{endDate}
+    	]]>
+	</if>
+	<if test="startDate == null or startDate == ''">
+		<![CDATA[
+			create_date is not null
+		]]>
+	</if>
+	<![CDATA[
+		) GROUP BY cdate) t ORDER BY t.cdate
+	]]>
+	</select>
+</mapper>

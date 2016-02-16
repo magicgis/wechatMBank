@@ -4,6 +4,7 @@
 package com.yitong.weixin.common.utils;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -388,5 +389,25 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     	result.append(val.substring(1));
     	return result.toString();
     }
+    
+/***************************前置代码**********************************************/
+    /**
+	 * 将时间转化为以秒为单位的时间串
+	 * @param date
+	 * @return
+	 */
+	public static String parseDate2SecondStr(Date date) {
+		return null == date ? "0" : String.valueOf(date.getTime() / 1000);
+	}
+	
+	/**
+	 * 将以秒为单位的时间串转化为时间
+	 * @param secondStr
+	 * @return
+	 */
+	public static Date parseSecondStr2Date(String secondStr) {
+		return org.springframework.util.StringUtils.hasText(secondStr) ? 
+				new Date(Long.valueOf(secondStr) * 1000) : null;
+	}
     
 }

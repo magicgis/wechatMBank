@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yitong.weixin.front.info.dao.WeixinMenuFDao">
+    
+	<sql id="weixinMenuColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.name AS "name",
+		a.acct_open_id AS "acctOpenId",
+		a.type AS "type",
+		a.url AS "url",
+		a.pid AS "pid",
+		a.is_hide AS "isHide",
+		a.order_n AS "orderN"
+	</sql>
+	
+	<sql id="weixinMenuJoins">
+	</sql>
+    
+	<select id="get" resultType="WeixinMenuF">
+		SELECT 
+			<include refid="weixinMenuColumns"/>
+		FROM weixin_menu a
+		<include refid="weixinMenuJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByPId" parameterType="java.util.Map"  resultType="WeixinMenuF">
+		SELECT 
+			<include refid="weixinMenuColumns"/>
+		FROM weixin_menu a
+		<include refid="weixinMenuJoins"/>
+		WHERE a.acct_open_id=#{acctOpenId} and a.pid is null order by a.order_n
+	</select>
+	
+	<select id="getByPId_" parameterType="java.util.Map"  resultType="WeixinMenuF">
+		SELECT 
+			<include refid="weixinMenuColumns"/>
+		FROM weixin_menu a
+		<include refid="weixinMenuJoins"/>
+		WHERE a.acct_open_id=#{acctOpenId} and a.pid=#{pid} order by a.order_n
+	</select>
+	
+	
+	<select id="findList" resultType="WeixinMenuF">
+		SELECT 
+			<include refid="weixinMenuColumns"/>
+		FROM weixin_menu a
+		<include refid="weixinMenuJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WeixinMenuF">
+		SELECT 
+			<include refid="weixinMenuColumns"/>
+		FROM weixin_menu a
+		<include refid="weixinMenuJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO weixin_menu(
+			id,
+			code,
+			name,
+			acct_open_id,
+			type,
+			url,
+			pid,
+			is_hide,
+			order_n
+		) VALUES (
+			#{id},
+			#{code},
+			#{name},
+			#{acctOpenId},
+			#{type},
+			#{url},
+			#{pid},
+			#{isHide},
+			#{orderN}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE weixin_menu SET 	
+			code = #{code},
+			name = #{name},
+			acct_open_id = #{acctOpenId},
+			type = #{type},
+			url = #{url},
+			pid = #{pid},
+			is_hide = #{isHide},
+			order_n = #{orderN}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM weixin_menu
+		WHERE id = #{id}
+	</update>
+
+	<sql id="hickStatsWhereSql">
+		<if test="acctOpenId != null and acctOpenId != ''">
+			<![CDATA[
+				and a.to_user = #{acctOpenId}
+		    ]]>
+		</if>
+		<if test="beginDate != null and beginDate != ''">
+			<![CDATA[
+    			and to_number(a.chick_time) >= #{beginDate} and to_number(a.chick_time) <#{endDate}
+    		]]>
+		</if>
+		<if test="beginDate == null or beginDate == ''">
+			<![CDATA[
+				and a.chick_time is not null
+			]]>
+		</if>
+	</sql>
+
+	<sql id="menuChickStatsSql">
+		<![CDATA[
+			select t.id, t.name, t.pid, a.from_user, a.type,to_char(a.chick_time / (60 * 60 * 24) +
+			to_date('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD') as cdate
+			from weixin_menu t, weixin_menu_chick_stats a
+			where t.type = 0 and t.code = a.key
+		]]>
+			<include refid="hickStatsWhereSql"/>
+		<![CDATA[
+			union all
+			select t.id, t.name, t.pid, a.from_user, a.type,to_char(a.chick_time / (60 * 60 * 24) +
+			to_date('1970-01-01 08:00:00', 'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD') as cdate
+			from weixin_menu t, weixin_menu_chick_stats a
+			where t.type = 1 and t.url = a.key
+		]]>
+			<include refid="hickStatsWhereSql"/>
+	</sql>
+
+	<select id="menuChickStats" parameterType="java.util.Map" resultType="java.util.HashMap">
+		<![CDATA[
+			SELECT a.pid,t.name as pname,a.id,a.name,COUNT(*) chick_count,COUNT(DISTINCT from_user) user_count,
+       		round(to_number(1.0 * COUNT(*) / COUNT(DISTINCT from_user)), 2) avg_chick_count
+  			FROM (
+  		]]>
+			<include refid="menuChickStatsSql"/>
+		<![CDATA[
+  			) a,weixin_menu t where t.id = a.pid GROUP BY a.id,a.name,a.pid,t.name ORDER BY chick_count desc
+  		]]>
+	</select>
+
+	<select id="menuChickStatsByDay" parameterType="java.util.Map" resultType="java.util.HashMap">
+		<![CDATA[
+			SELECT a.id,a.name,COUNT(*) chick_count,COUNT(DISTINCT from_user) user_count,
+       		round(to_number(1.0 * COUNT(*) / COUNT(DISTINCT from_user)), 2) avg_chick_count,a.cdate
+  			FROM (
+  		]]>
+		<include refid="menuChickStatsSql"/>
+		<![CDATA[
+  			) a GROUP BY a.id,a.name,a.cdate
+  		]]>
+	</select>
+
+	<select id="menuChickStatsYesterday" parameterType="java.util.Map" resultType="java.util.HashMap">
+		<![CDATA[
+			SELECT COUNT(*) chick_count,COUNT(DISTINCT from_user) user_count,
+       		round(to_number(1.0 * COUNT(*) / COUNT(DISTINCT from_user)), 2) avg_chick_count
+  			FROM (
+  		]]>
+		<include refid="menuChickStatsSql"/>
+		<![CDATA[
+  			) a GROUP BY a.cdate
+  		]]>
+	</select>
+</mapper>
