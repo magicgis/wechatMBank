@@ -75,7 +75,7 @@ public class WeixinMenuListController extends BaseController {
 				return form(weixinMenuList, model);
 			}
 		}
-		
+		weixinMenuList.setActionType("1");//显示消息内容
 		weixinMenuListService.save(weixinMenuList);
 		addMessage(redirectAttributes, "保存菜单规则成功");
 		return "redirect:"+Global.getAdminPath()+"/wechat/weixinMenuList/?repage";
