@@ -73,11 +73,13 @@ public class ReceiveMessage {
 		
 		logger.debug("WEIXIN_URL======1======"+signature+"<>"+timestamp+"<>"+nonce);
 		
-		if(WeiXinUtils.checkSignature(signature,timestamp,nonce)){
+		return echostr;
+		
+		/*if(WeiXinUtils.checkSignature(signature,timestamp,nonce)){
 			return echostr;
 		}else{
 			return "";
-		}
+		}*/
 	}
 	
 	@RequestMapping(value = "")
