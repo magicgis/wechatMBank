@@ -88,17 +88,19 @@ public class ReceiveMessage {
 		logger.debug("WEIXIN_URL====3========"+request.getRemoteAddr());
 		logger.debug("WEIXIN_URL====4========"+request.getRemoteHost());
 		logger.debug("WEIXIN_URL====5========"+request.getRemotePort());
+		
+		String xml = WeiXinUtils.readStreamParameter(request.getInputStream());
+		//解析xml消息
+		BaseMessageF baseMessage = getBaseMessage(xml);
+		System.out.println(baseMessage.getToUserName()+"==============>"+baseMessage.getFromUserName()+"==============>\n");
 		//检测签名信息
-		if(WeiXinUtils.checkSignature(request)){
-			String xml = WeiXinUtils.readStreamParameter(request.getInputStream());
-			//解析xml消息
-			BaseMessageF baseMessage = getBaseMessage(xml);
+		if(WeiXinUtils.checkSignature(request, baseMessage.getToUserName())){
 			System.out.println(baseMessage.getToUserName()+"==============>"+baseMessage.getFromUserName()+"==============>\n");
 			if(baseMessage!=null){
 				//这里不保存用户数据--在事件中保存
 //				WeixinUser findTmp = weiXinUserService.findByOpenId(baseMessage.getFromUserName());
 //				if(findTmp==null){
-//					getUserInfo(baseMessage.getFromUserName());
+//					getUserInfo(baseMessage.getFromUserName(), baseMessage.getToUserName());
 //				}
 				//获取消息类型
 				String msgType  = baseMessage.getMsgType();
@@ -175,8 +177,8 @@ public class ReceiveMessage {
               
         }  
     } 
-	private void getUserInfo(String openId){
-		String userInfoStr = WeiXinUtils.getUserDetailInfo(openId);
+	private void getUserInfo(String openId, String accOpenId){
+		String userInfoStr = WeiXinUtils.getUserDetailInfo(openId, accOpenId);
 		UserDetailInfo userInfo = JSONObject.parseObject(userInfoStr, UserDetailInfo.class);
 		WeixinUserF findTmp = weiXinUserFService.findByOpenId(openId);
 		//重新设置订阅时间（当前系统时间）

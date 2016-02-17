@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yitong.weixin.front.info.dao.WeixinAccountFDao">
+    
+	<sql id="weixinAccountColumns">
+		a.id AS "id",
+		a.acct_name AS "acctName",
+		a.acct_open_id AS "acctOpenId",
+		a.app_id AS "appId",
+		a.app_sercet AS "appSercet",
+		a.token AS "token",
+		a.aeskey AS "aeskey",
+		a.user_id AS "user.id"
+	</sql>
+	
+	<sql id="weixinAccountJoins">
+		LEFT JOIN sys_user u8 ON u8.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="WeixinAccountF">
+		SELECT 
+			<include refid="weixinAccountColumns"/>
+		FROM weixin_account a
+		<include refid="weixinAccountJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findByUserId" parameterType="java.util.Map" resultType="WeixinAccountF">
+		SELECT 
+			<include refid="weixinAccountColumns"/>
+		FROM weixin_account a
+		<include refid="weixinAccountJoins"/>
+		WHERE a.user_id = #{userId}
+	</select>
+	
+	<select id="findByUserAndAcctId" parameterType="java.util.Map" resultType="WeixinAccountF">
+		SELECT 
+			<include refid="weixinAccountColumns"/>
+		FROM weixin_account a
+		<include refid="weixinAccountJoins"/>
+		where
+		    a.user_id = #{userId}
+			AND a.acct_open_id = #{acctOpenId}
+	</select>
+	
+	<select id="findList" resultType="WeixinAccountF">
+		SELECT 
+			<include refid="weixinAccountColumns"/>
+		FROM weixin_account a
+		<include refid="weixinAccountJoins"/>
+		<where>
+			
+			<if test="acctName != null and acctName != ''">
+				AND a.acct_name = #{acctName}
+			</if>
+			<if test="acctOpenId != null and acctOpenId != ''">
+				AND a.acct_open_id = #{acctOpenId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WeixinAccountF">
+		SELECT 
+			<include refid="weixinAccountColumns"/>
+		FROM weixin_account a
+		<include refid="weixinAccountJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO weixin_account(
+			id,
+			acct_name,
+			acct_open_id,
+			app_id,
+			app_sercet,
+			token,
+			aeskey,
+			user_id
+		) VALUES (
+			#{id},
+			#{acctName},
+			#{acctOpenId},
+			#{appId},
+			#{appSercet},
+			#{token},
+			#{aeskey},
+			#{user.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE weixin_account SET 	
+			acct_name = #{acctName},
+			acct_open_id = #{acctOpenId},
+			app_id = #{appId},
+			app_sercet = #{appSercet},
+			token = #{token},
+			aeskey = #{aeskey},
+			user_id = #{user.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM weixin_account
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findByAcctId" parameterType="java.util.Map" resultType="WeixinAccountF">
+		SELECT 
+			<include refid="weixinAccountColumns"/>
+		FROM weixin_account a
+		where a.acct_open_id = #{accOpenId}
+	</select>
+	
+</mapper>

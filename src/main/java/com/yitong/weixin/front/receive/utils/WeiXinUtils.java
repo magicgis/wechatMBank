@@ -26,8 +26,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
+import com.yitong.weixin.common.utils.SpringContextHolder;
+import com.yitong.weixin.front.info.dao.WeixinAccountFDao;
+import com.yitong.weixin.front.info.entity.WeixinAccountF;
+import com.yitong.weixin.modules.wechat.dao.WeixinAccountDao;
 
 public class WeiXinUtils {
+	private static WeixinAccountFDao weixinAccountFDao = SpringContextHolder.getBean(WeixinAccountFDao.class);
 
 	public static String readStreamParameter(ServletInputStream in) {
 		StringBuilder buffer = new StringBuilder();
@@ -64,11 +69,12 @@ public class WeiXinUtils {
     } 
 
 	// 微信接口验证
-	public static boolean checkSignature(HttpServletRequest request) {
+	public static boolean checkSignature(HttpServletRequest request, String openId) {
 		String signature = request.getParameter("signature");
 		String timestamp = request.getParameter("timestamp");
 		String nonce = request.getParameter("nonce");
-		String token = CF.Token;
+		WeixinAccountF weixinAccountF = getAcct(openId);
+		String token = weixinAccountF.getToken();
 		String[] tmpArr = { token, timestamp, nonce };
 		Arrays.sort(tmpArr);
 		String tmpStr = ArrayToString(tmpArr);
@@ -128,16 +134,17 @@ public class WeiXinUtils {
 	/**
 	 * 获取access_token;
     **/
-	public static String getAccessToken(){
+	public static String getAccessToken(String accOpenId){
 		if(CF.AccessToken.equals("")){
-/*			
-			#appId = wx9be53499a9491800
-			#appsecret = 123e6ebe3571da02195c0d983f540662
-			#token = dN3o59EeYo3Dey8i1tnQIi3Qi9L99e8q*/
+			WeixinAccountF weixinAccount = getAcct(accOpenId);
+			
+//			#appId = wx9be53499a9491800
+//			#appsecret = 123e6ebe3571da02195c0d983f540662
+//			#token = dN3o59EeYo3Dey8i1tnQIi3Qi9L99e8q
 			String acctokenUrl = CF.accessTokenUrl+"?grant_type=client_credential" +
-					"&appid="+CF.appId+"&secret="+CF.appsecret;
-			/*String acctokenUrl = C.accessTokenUrl+"?grant_type=client_credential" +
-					"&appid="+"wx9be53499a9491800"+"&secret="+"123e6ebe3571da02195c0d983f540662";*/
+					"&appid="+weixinAccount.getAppId()+"&secret="+weixinAccount.getAppSercet();
+//			String acctokenUrl = CF.accessTokenUrl+"?grant_type=client_credential" +
+//					"&appid="+"wx9be53499a9491800"+"&secret="+"123e6ebe3571da02195c0d983f540662";
 			String result = getWeiXin(acctokenUrl);
 			System.out.println("result------------------->"+result);
 			JSONObject jsonStr = JSONObject.parseObject(result);
@@ -150,8 +157,8 @@ public class WeiXinUtils {
 	/**
 	 * 获取用户具体信息
 	 * */
-	public static String getUserDetailInfo(String openId){
-		String url = String.format(CF.getUserInfoUrl, getAccessToken(),openId);
+	public static String getUserDetailInfo(String openId, String accOpenId){
+		String url = String.format(CF.getUserInfoUrl, getAccessToken(accOpenId),openId);
 		return getWeiXin(url);
 	}
 	
@@ -343,6 +350,10 @@ public class WeiXinUtils {
 		
 		String params = "TOKEN=111111";
 		return params;
+	}
+	
+	public static WeixinAccountF getAcct(String accOpenId){
+		return weixinAccountFDao.findByAcctId(accOpenId);
 	}
 	
 }

@@ -160,9 +160,9 @@ public class Webmsg0301 {
 						"USERNAME=%USERNAME%&OPENID=%OPENID%"+
 								"&MSGID=%MSGID%&"+"getToken(subEvent.getFromUserName())"+"\">点击这里  立即签约</a>";
 								*/
-				rspMsg +="\n<a href=\""+CF.ip+"/app/16/001.jsp?" +
-						"USERNAME=%USERNAME%&OPENID=%OPENID%"+
-						"&MSGID=%MSGID%&"+WeiXinUtils.getToken(subEvent.getFromUserName())+"\">点击这里  立即签约</a>";
+//				rspMsg +="\n<a href=\""+CF.ip+"/app/16/001.jsp?" +
+//						"USERNAME=%USERNAME%&OPENID=%OPENID%"+
+//						"&MSGID=%MSGID%&"+WeiXinUtils.getToken(subEvent.getFromUserName())+"\">点击这里  立即签约</a>";
 				rspMsg = replacePara(rspMsg, subEvent.getFromUserName(), subEvent.getCreateTime());
 			} 
 		}
@@ -205,7 +205,8 @@ public class Webmsg0301 {
 	 */
 	private void getUserInfo(SubscribeEvent subEvent){
 		String openId = subEvent.getFromUserName();
-		String userInfoStr = WeiXinUtils.getUserDetailInfo(openId);
+		String accOpenId = subEvent.getToUserName();
+		String userInfoStr = WeiXinUtils.getUserDetailInfo(openId,accOpenId);
 		
 			UserDetailInfo userInfo = JSONObject.parseObject(userInfoStr, UserDetailInfo.class);
 			WeixinUserF findTmp = weiXinUserFService.findByOpenId(openId);

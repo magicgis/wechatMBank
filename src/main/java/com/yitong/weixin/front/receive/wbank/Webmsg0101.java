@@ -105,9 +105,9 @@ public class Webmsg0101{
 					}else{//未签约
 						// 签约标记
 						rspMsg += CF.common_val2;
-						rspMsg +="\n<a href=\""+CF.ip+"/phoneDown/003.html?" +
-								"USERNAME=%USERNAME%&OPENID=%OPENID%"+
-								"&MSGID=%MSGID%&TOKEN=%TOKEN%&tag=1\">点击这里  立即签约</a>";
+//						rspMsg +="\n<a href=\""+CF.ip+"/phoneDown/003.html?" +
+//								"USERNAME=%USERNAME%&OPENID=%OPENID%"+
+//								"&MSGID=%MSGID%&TOKEN=%TOKEN%&tag=1\">点击这里  立即签约</a>";
 						//TODO:处理签约token
 						rspMsg = replacePara(rspMsg, subEvent.getFromUserName(), subEvent.getCreateTime());
 						return Reply.rspTextMsg(subEvent.getFromUserName(), subEvent.getToUserName(), rspMsg);
@@ -206,9 +206,9 @@ public class Webmsg0101{
 			if(mark == null || mark.equals("")){
 				//String val = C.common_val2+C.common_val3;
 				rspMsg += CF.common_val2;
-				rspMsg +="\n<a href=\""+CF.ip+"/app/16/001.jsp?" +
-						"USERNAME=%USERNAME%&OPENID=%OPENID%"+
-						"&MSGID=%MSGID%&"+WeiXinUtils.getToken(subEvent.getFromUserName())+"\">点击这里  立即签约</a>";
+//				rspMsg +="\n<a href=\""+CF.ip+"/app/16/001.jsp?" +
+//						"USERNAME=%USERNAME%&OPENID=%OPENID%"+
+//						"&MSGID=%MSGID%&"+WeiXinUtils.getToken(subEvent.getFromUserName())+"\">点击这里  立即签约</a>";
 				
 				//TODO:处理签约token
 				rspMsg = replacePara(rspMsg, subEvent.getFromUserName(), subEvent.getCreateTime());

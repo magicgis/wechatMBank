@@ -19,16 +19,12 @@ import com.yitong.weixin.front.info.entity.WeixinMessageF;
 import com.yitong.weixin.front.info.service.ArticleFService;
 import com.yitong.weixin.front.info.service.WeiXinSessionParaService;
 import com.yitong.weixin.front.info.service.WeiXinSessionService;
-import com.yitong.weixin.front.info.service.WeixinMenuFService;
-import com.yitong.weixin.front.info.service.WeixinMenuListFService;
 import com.yitong.weixin.front.info.service.WeixinMessageFService;
-import com.yitong.weixin.front.info.service.WeixinUserFService;
 import com.yitong.weixin.front.receive.func.Reply;
 import com.yitong.weixin.front.receive.msgbean.SubscribeEvent;
 import com.yitong.weixin.front.receive.msgbean.TextMessage;
 import com.yitong.weixin.front.receive.utils.CF;
 import com.yitong.weixin.front.receive.utils.WeiXinUtils;
-import com.yitong.weixin.front.receive.web.TradingTipsMessage;
 
 @Service
 public class Webmsg01{
