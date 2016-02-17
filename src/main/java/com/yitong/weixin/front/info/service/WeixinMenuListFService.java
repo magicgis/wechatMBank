@@ -54,9 +54,10 @@ public class WeixinMenuListFService extends CrudService<WeixinMenuListFDao, Weix
 	 * @param code 规则编码
 	 * @return
 	 */
-	public WeixinMenuListF getByCode(String code){
+	public WeixinMenuListF getByCode(String code,String acctOpenId){
 		Map<String,Object> map = Maps.newHashMap();
 		map.put("code", code);
+		map.put("acctOpenId", acctOpenId);
 		List<WeixinMenuListF> list = dao.getByCode(map);
 		if(list!=null && list.size()>0){
 			return list.get(0);

@@ -52,7 +52,7 @@ public class Webmsg0301 {
 			if(subEvent.getEventKey() == null){
 				return "";
 			}
-			WeixinMenuListF weiXinList = weiXinMenuListFService.getByCode(subEvent.getEventKey());
+			WeixinMenuListF weiXinList = weiXinMenuListFService.getByCode(subEvent.getEventKey(),subEvent.getToUserName());
 			if(weiXinList == null){
 				//error
 				rspMsg = CF.error_val;
@@ -224,6 +224,7 @@ public class Webmsg0301 {
 //				logger.info("bbbbbbbbbbbbbbbbbb本地无记录获取用户UserDetailInfo======="+userInfo.getOpenId()+"<<<<>>>>>"+userInfo.getNickname());
 				if(null != userInfo && null != userInfo.getOpenid()){
 					WeixinUserF weiXinUser = new WeixinUserF(userInfo);
+					weiXinUser.setAcctOpenId(accOpenId);
 					weiXinUserFService.save(weiXinUser);
 				}
 			}else{
@@ -272,6 +273,7 @@ public class Webmsg0301 {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
+		rspMsg +=content;
 		return rspMsg;
 	}
 }

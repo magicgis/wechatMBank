@@ -51,7 +51,7 @@
 	<form:form id="searchForm" modelAttribute="article" action="${ctx}/wechat/weixinMenuList/selectListRadio" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		<input id="msgType" name="msgType" type="hidden" value="${msgType}"/>
+		<input id="msgType" name="msgType" type="hidden" value="${article.msgType}"/>
 		<label>栏目：</label><sys:treeselect id="category" name="category.id" value="${article.category.id}" labelName="category.name" labelValue="${article.category.name}"
 					title="栏目" url="/cms/category/treeData" module="article"/>
 		<label>标题：</label><form:input path="title" htmlEscape="false" maxlength="50" class="input-medium"/>&nbsp;
