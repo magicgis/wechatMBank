@@ -29,7 +29,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.yitong.weixin.common.utils.SpringContextHolder;
 import com.yitong.weixin.front.info.dao.WeixinAccountFDao;
 import com.yitong.weixin.front.info.entity.WeixinAccountF;
-import com.yitong.weixin.modules.wechat.dao.WeixinAccountDao;
 
 public class WeiXinUtils {
 	private static WeixinAccountFDao weixinAccountFDao = SpringContextHolder.getBean(WeixinAccountFDao.class);
@@ -87,7 +86,7 @@ public class WeiXinUtils {
 	}
 	
 	// 微信接口验证
-	public static boolean checkSignature(String signature,String timestamp,String nonce) {
+	/*public static boolean checkSignature(String signature,String timestamp,String nonce) {
 		String token = CF.Token;
 		String[] tmpArr = { token, timestamp, nonce };
 		Arrays.sort(tmpArr);
@@ -98,7 +97,7 @@ public class WeiXinUtils {
 		} else {
 			return false;
 		}
-	}
+	}*/
 
 	// 数组转字符串
 	public static String ArrayToString(String[] arr) {
