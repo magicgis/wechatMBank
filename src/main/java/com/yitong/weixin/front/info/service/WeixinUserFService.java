@@ -102,11 +102,11 @@ public class WeixinUserFService extends CrudService<WeixinUserFDao, WeixinUserF>
 		dao.updateSubTimeByOpenId(map);
 	}
 
-	public void updateWeixinUserByOpenId(WeixinUserF weixinUserF) {
-		dao.updateWeixinUserByOpenId(weixinUserF);
+	public void updateWeixinUserByOpenId(Map<String, Object> map) {
+		dao.updateWeixinUserByOpenId(map);
 	}
 
-	public void updateWeixinUserByOpenId2(WeixinUserF weixinUserF) {
-		dao.updateWeixinUserByOpenId2(weixinUserF);
+	public void updateWeixinUserByOpenId2(Map<String, Object> map) {
+		dao.updateWeixinUserByOpenId2(map);
 	}
 }

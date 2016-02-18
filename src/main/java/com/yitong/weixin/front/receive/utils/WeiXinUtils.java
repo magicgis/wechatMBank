@@ -12,6 +12,8 @@ import java.security.MessageDigest;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,11 +28,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
+import com.yitong.weixin.common.utils.DateUtils;
 import com.yitong.weixin.common.utils.SpringContextHolder;
 import com.yitong.weixin.front.info.dao.WeixinAccountFDao;
+import com.yitong.weixin.front.info.entity.WeixinAccessTokenF;
 import com.yitong.weixin.front.info.entity.WeixinAccountF;
+import com.yitong.weixin.front.info.service.WeixinAccessTokenFService;
 
 public class WeiXinUtils {
+	private static AccessTokenF accessToken = new AccessTokenF();
 	private static WeixinAccountFDao weixinAccountFDao = SpringContextHolder.getBean(WeixinAccountFDao.class);
 
 	public static String readStreamParameter(ServletInputStream in) {
@@ -134,23 +140,19 @@ public class WeiXinUtils {
 	 * 获取access_token;
     **/
 	public static String getAccessToken(String accOpenId){
-		if(CF.AccessToken.equals("")){
-			WeixinAccountF weixinAccount = getAcct(accOpenId);
-			
-//			#appId = wx9be53499a9491800
-//			#appsecret = 123e6ebe3571da02195c0d983f540662
-//			#token = dN3o59EeYo3Dey8i1tnQIi3Qi9L99e8q
-			String acctokenUrl = CF.accessTokenUrl+"?grant_type=client_credential" +
-					"&appid="+weixinAccount.getAppId()+"&secret="+weixinAccount.getAppSercet();
-//			String acctokenUrl = CF.accessTokenUrl+"?grant_type=client_credential" +
-//					"&appid="+"wx9be53499a9491800"+"&secret="+"123e6ebe3571da02195c0d983f540662";
+		final String accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token";
+		WeixinAccountF weixinAccountF = getAcct(accOpenId);
+//		System.out.println("cur_token = [" + accessToken.getToken() + "| isExpired = " + accessToken.isExpired() + "]");
+		if(accessToken.isExpired(accOpenId))
+		{
+			String acctokenUrl = accessTokenUrl+"?grant_type=client_credential" + "&appid="+weixinAccountF.getAppId()+"&secret="+weixinAccountF.getAppSercet();
 			String result = getWeiXin(acctokenUrl);
-			System.out.println("result------------------->"+result);
+			System.out.println("result------------------->"+result + " cur_date = "+ DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
 			JSONObject jsonStr = JSONObject.parseObject(result);
-			return jsonStr.getString("access_token");
-		}else{
-			return CF.AccessToken;
+			accessToken.setToken(jsonStr.getString("access_token"), jsonStr.getString("expires_in"), accOpenId);
 		}
+		
+		return accessToken.getToken(accOpenId);
 	}
 	
 	/**
@@ -355,4 +357,62 @@ public class WeiXinUtils {
 		return weixinAccountFDao.findByAcctId(accOpenId);
 	}
 	
+}
+
+class AccessTokenF {
+	private WeixinAccessTokenFService weixinAccessTokenService = SpringContextHolder.getBean(WeixinAccessTokenFService.class);
+	
+//	private String access_token;	// 有效token  
+//    private Date expires_in;  		// 有效期,获取token时间+过期时间
+	
+    /**
+    * @Title: setToken
+    * @Description: 获取新的token，重新设置
+    * @param token
+    * @param expires_in
+    * @return void
+     */
+    public void setToken(String token, String expires_in, String acctOpenId)
+    {
+//    	this.access_token = token;
+    	Calendar cal = Calendar.getInstance();
+    	cal.add(Calendar.SECOND, Integer.parseInt(expires_in)-10);
+//    	this.expires_in = cal.getTime();
+    	WeixinAccessTokenF weixinAccessToken = weixinAccessTokenService.getAccessTokenByOpenId(acctOpenId);
+    	if(weixinAccessToken == null){
+    		weixinAccessToken = new WeixinAccessTokenF();
+    	}
+    	weixinAccessToken.setAccessToken(token);
+    	weixinAccessToken.setExpiresIn(cal.getTime());
+    	weixinAccessToken.setAcctOpenId(acctOpenId);
+    	weixinAccessTokenService.save(weixinAccessToken);
+    }
+    /**
+     * 
+    * @Title: isExpired
+    * @Description: 是否过期
+    * @return
+    * @return boolean
+     */
+    public boolean isExpired(String acctOpenId)
+    {
+    	// 第一次使用，过期
+    	WeixinAccessTokenF weixinAccessToken = weixinAccessTokenService.getAccessTokenByOpenId(acctOpenId);
+    	if(weixinAccessToken == null){
+    		return true;
+    	}
+    	// 现在时间在过期时间之后，认为过期
+    	Calendar cal=Calendar.getInstance();
+    	cal.setTime(weixinAccessToken.getExpiresIn());
+    	if(Calendar.getInstance().after(cal))
+    		return true;
+    	return false;
+    }
+    
+    public String getToken(String acctOpenId)
+    {
+    	WeixinAccessTokenF weixinAccessToken = weixinAccessTokenService.getAccessTokenByOpenId(acctOpenId);
+    	return weixinAccessToken.getAccessToken();
+    }
+    
 }

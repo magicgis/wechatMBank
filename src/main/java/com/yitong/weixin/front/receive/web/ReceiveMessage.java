@@ -6,6 +6,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -194,16 +196,16 @@ public class ReceiveMessage {
 			}
 		}else{
 			if(null != userInfo && null != userInfo.getOpenid()){
-				WeixinUserF weixinUserF = new WeixinUserF();
-				weixinUserF.setUserName(userInfo.getNickname());
-				weixinUserF.setSex(userInfo.getSex());
-				weixinUserF.setCity(userInfo.getCity());
-				weixinUserF.setCountry(userInfo.getCountry());
-				weixinUserF.setHeadImgUrl(userInfo.getHeadimgurl());
-				weixinUserF.setCancelSubscribeTime("");
-				weixinUserF.setOpenId(openId);
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("userName", userInfo.getNickname());
+				map.put("sex", userInfo.getSex());
+				map.put("city", userInfo.getCity());
+				map.put("country", userInfo.getCountry());
+				map.put("headImgUrl", userInfo.getHeadimgurl());
+				map.put("openId", openId);
+				map.put("cancelSubscribeTime", "");
 				
-				weiXinUserFService.updateWeixinUserByOpenId2(weixinUserF);
+				weiXinUserFService.updateWeixinUserByOpenId2(map);
 			}
 		}
 	}

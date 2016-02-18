@@ -250,7 +250,7 @@
 		</if>
 	</select>
 	
-	<update id="updateWeixinUserByOpenId1">
+	<update id="updateWeixinUserByOpenId">
 		UPDATE weixin_user SET 	
 			user_name = #{userName},
 			sex = #{sex},

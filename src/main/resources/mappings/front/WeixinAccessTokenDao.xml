@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yitong.weixin.front.info.dao.WeixinAccessTokenFDao">
+    
+	<sql id="weixinAccessTokenColumns">
+		a.id AS "id",
+		a.acct_open_id AS "acctOpenId",
+		a.access_token AS "accessToken",
+		a.expires_in AS "expiresIn"
+	</sql>
+	
+	<sql id="weixinAccessTokenJoins">
+	</sql>
+    
+	<select id="get" resultType="WeixinAccessTokenF">
+		SELECT 
+			<include refid="weixinAccessTokenColumns"/>
+		FROM weixin_access_token a
+		<include refid="weixinAccessTokenJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WeixinAccessTokenF">
+		SELECT 
+			<include refid="weixinAccessTokenColumns"/>
+		FROM weixin_access_token a
+		<include refid="weixinAccessTokenJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WeixinAccessTokenF">
+		SELECT 
+			<include refid="weixinAccessTokenColumns"/>
+		FROM weixin_access_token a
+		<include refid="weixinAccessTokenJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO weixin_access_token(
+			id,
+			acct_open_id,
+			access_token,
+			expires_in
+		) VALUES (
+			#{id},
+			#{acctOpenId},
+			#{accessToken},
+			#{expiresIn}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE weixin_access_token SET 	
+			acct_open_id = #{acctOpenId},
+			access_token = #{accessToken},
+			expires_in = #{expiresIn}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM weixin_access_token
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getAccessTokenByOpenId" resultType="WeixinAccessTokenF">
+		SELECT 
+			<include refid="weixinAccessTokenColumns"/>
+		FROM weixin_access_token a
+		WHERE a.acct_open_id = #{acctOpenId}
+	</select>
+	
+</mapper>

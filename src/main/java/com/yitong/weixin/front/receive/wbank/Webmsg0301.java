@@ -2,12 +2,16 @@ package com.yitong.weixin.front.receive.wbank;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.druid.support.json.JSONUtils;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.yitong.weixin.front.info.entity.ArticleF;
 import com.yitong.weixin.front.info.entity.WeixinMenuListF;
@@ -232,8 +236,17 @@ public class Webmsg0301 {
 //				logger.info("cccccccccccccccccccccccc本地有记录获取用户UserDetailInfo======="+userInfo);
 //				logger.info("cccccccccccccccccccccccc本地有记录获取用户UserDetailInfo======="+userInfo.getOpenId()+"<<<<>>>>>"+userInfo.getNickname());
 				if(null != userInfo && null != userInfo.getOpenid()){
-					WeixinUserF weiXinUser = new WeixinUserF(userInfo);
-					weiXinUserFService.updateWeixinUserByOpenId(weiXinUser);
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put("userName", userInfo.getNickname());
+					map.put("sex", userInfo.getSex());
+					map.put("city", userInfo.getCity());
+					map.put("country", userInfo.getCountry());
+					map.put("province", userInfo.getProvince());
+					map.put("headImgUrl", userInfo.getHeadimgurl());
+					map.put("groupId", "1");
+					map.put("cancelSubscribeTime", "");
+					map.put("openId", openId);
+					weiXinUserFService.updateWeixinUserByOpenId(map);
 				}else{
 					weiXinUserFService.updateSubTimeByOpenId("",openId);
 				}

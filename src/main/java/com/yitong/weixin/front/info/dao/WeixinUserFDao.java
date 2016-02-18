@@ -34,7 +34,7 @@ public interface WeixinUserFDao extends CrudDao<WeixinUserF> {
 
 	public void updateSubTimeByOpenId(Map<String, Object> map);
 
-	public void updateWeixinUserByOpenId(WeixinUserF weixinUserF);
+	public void updateWeixinUserByOpenId(Map<String, Object> map);
 
-	public void updateWeixinUserByOpenId2(WeixinUserF weixinUserF);
+	public void updateWeixinUserByOpenId2(Map<String, Object> map);
 }
