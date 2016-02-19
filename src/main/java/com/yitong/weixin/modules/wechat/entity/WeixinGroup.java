@@ -9,8 +9,8 @@ import com.yitong.weixin.common.persistence.DataEntity;
 
 /**
  * 微信分组Entity
- * @author fwy
- * @version 2015-12-31
+ * @author hf
+ * @version 2016-02-18
  */
 public class WeixinGroup extends DataEntity<WeixinGroup> {
 	
@@ -19,9 +19,22 @@ public class WeixinGroup extends DataEntity<WeixinGroup> {
 	private String groupComment;		// group_comment
 	private Long groupTimes;		// group_times
 	private String acctOpenId;		// acct_open_id
+	private String groupId;		// group_id
 	
 	private String groupOldName;//修改分组旧名
 	
+	public String getGroupOldName() {
+		return groupOldName;
+	}
+
+	public void setGroupOldName(String groupOldName) {
+		this.groupOldName = groupOldName;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	public WeixinGroup() {
 		super();
 	}
@@ -64,13 +77,14 @@ public class WeixinGroup extends DataEntity<WeixinGroup> {
 	public void setAcctOpenId(String acctOpenId) {
 		this.acctOpenId = acctOpenId;
 	}
-
-	public String getGroupOldName() {
-		return groupOldName;
+	
+	@Length(min=0, max=16, message="group_id长度必须介于 0 和 16 之间")
+	public String getGroupId() {
+		return groupId;
 	}
 
-	public void setGroupOldName(String groupOldName) {
-		this.groupOldName = groupOldName;
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
 	}
 	
 }

@@ -7,7 +7,8 @@
 		a.group_name AS "groupName",
 		a.group_comment AS "groupComment",
 		a.group_times AS "groupTimes",
-		a.acct_open_id AS "acctOpenId"
+		a.acct_open_id AS "acctOpenId",
+		a.group_id AS "groupId"
 	</sql>
 	
 	<sql id="weixinGroupJoins">
@@ -64,12 +65,14 @@
 	<insert id="insert">
 		INSERT INTO weixin_group(
 			id,
+			group_id,
 			group_name,
 			group_comment,
 			group_times,
 			acct_open_id
 		) VALUES (
 			#{id},
+			#{groupId},
 			#{groupName},
 			#{groupComment},
 			#{groupTimes},
@@ -79,6 +82,7 @@
 	
 	<update id="update">
 		UPDATE weixin_group SET 	
+			group_id = #{groupId},
 			group_name = #{groupName},
 			group_comment = #{groupComment},
 			group_times = #{groupTimes},

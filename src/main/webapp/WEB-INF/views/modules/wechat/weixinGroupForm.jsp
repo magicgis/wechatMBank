@@ -33,6 +33,7 @@
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="weixinGroup" action="${ctx}/wechat/weixinGroup/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
+		<form:hidden path="groupId"/>
 		<form:hidden path="groupOldName"/>
 		<form:hidden path="acctOpenId"/>
 		<form:hidden path="groupTimes"/>

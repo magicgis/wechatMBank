@@ -64,8 +64,8 @@
 					${weixinGroup.acctOpenId}
 				</td>
 				<td>
-    				<a href="${ctx}/wechat/weixinGroup/form?id=${weixinGroup.id}">同步修改</a>&nbsp;
-					<a href="${ctx}/wechat/weixinGroup/delete?id=${weixinGroup.id}" onclick="return confirmx('确认要删除该微信分组吗？', this.href)">同步删除</a>
+    				<a href="${ctx}/wechat/weixinGroup/form?id=${weixinGroup.id}&groupId=${weixinGroup.groupId}">同步修改</a>&nbsp;
+					<a href="${ctx}/wechat/weixinGroup/delete?id=${weixinGroup.id}&groupId=${weixinGroup.groupId}" onclick="return confirmx('确认要删除该微信分组吗？', this.href)">同步删除</a>
 				</td>
 			</tr>
 		</c:forEach>
