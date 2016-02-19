@@ -23,7 +23,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +30,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.alibaba.fastjson.JSONObject;
 import com.yitong.weixin.common.utils.DateUtils;
 import com.yitong.weixin.common.utils.SpringContextHolder;
-import com.yitong.weixin.common.utils.StringUtils;
 import com.yitong.weixin.front.info.dao.WeixinAccountFDao;
 import com.yitong.weixin.front.info.entity.WeixinAccessTokenF;
 import com.yitong.weixin.front.info.entity.WeixinAccountF;
@@ -40,8 +38,7 @@ import com.yitong.weixin.front.info.service.WeixinAccessTokenFService;
 public class WeiXinUtils {
 	private static AccessTokenF accessToken = new AccessTokenF();
 	private static WeixinAccountFDao weixinAccountFDao = SpringContextHolder.getBean(WeixinAccountFDao.class);
-	private static ServletContext context = SpringContextHolder.getBean(ServletContext.class);
-	
+
 	public static String readStreamParameter(ServletInputStream in) {
 		StringBuilder buffer = new StringBuilder();
 		BufferedReader reader = null;
@@ -359,17 +356,6 @@ public class WeiXinUtils {
 	public static WeixinAccountF getAcct(String accOpenId){
 		return weixinAccountFDao.findByAcctId(accOpenId);
 	}
-	
-	/*public static String formatImageSrcToDb(String image){
-		 if(StringUtils.isBlank(image)) return image;
-        if(src.startsWith("/userfiles")){
-            return src;
-        }else{
-            return context.getContextPath()+src;
-        }
-		context.getContextPath()
-		return "";
-	}*/
 	
 }
 
