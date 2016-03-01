@@ -37,7 +37,7 @@ import com.yitong.weixin.front.receive.wbank.Webmsg02;
 import com.yitong.weixin.front.receive.wbank.Webmsg03;
 
 @Controller
-@RequestMapping(value = "/dispatch/weiXinMessage")
+@RequestMapping(value = "${frontPath}/weixin")
 public class ReceiveMessage {
 	private Logger logger = LoggerFactory.getLogger(ReceiveMessage.class);
 
