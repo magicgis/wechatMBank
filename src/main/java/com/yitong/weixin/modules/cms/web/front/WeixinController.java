@@ -19,7 +19,8 @@ import com.yitong.weixin.modules.cms.utils.WiexinSignUtil;
  * @version 2014-02-28
  */
 @Controller
-@RequestMapping(value = "${frontPath}/weixin")
+@RequestMapping(value = "${adminPath}/weixin")
+/*@RequestMapping(value = "${frontPath}/weixin")*/
 public class WeixinController extends BaseController {
 
 	/**
